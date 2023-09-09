@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>register</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style type="text/css">
+        body {background-color: #337ab7}
+    </style>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=bXNZSyNiIoR9ZScVExInFZPDycQVPLle"></script>
+    <script src="js/jquery-3.4.1.js"></script>
+    <script>
+        function checkbox1(){
+            window.location.href = 'user-register.html';
+        }
+        function checkbox2(){
+            var check=document.getElementsByName("checkbox");
+            check[0].checked=false;
+            check[1].checked=true;
+        }
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                var address=document.getElementsByName("inputAddress")[0].value;
+                // 创建地址解析器实例
+                var myGeo = new BMap.Geocoder();
+                // 将地址解析结果显示在地图上,并调整地图视野
+                myGeo.getPoint(address, function(point){
+                    if (point) {
+                        var sellername=document.getElementsByName("inputSeller")[0].value;
+                        var password=document.getElementsByName("inputPassword")[0].value;
+                        var name=document.getElementsByName("inputName")[0].value;
+                        var phone=document.getElementsByName("inputPhone")[0].value;
+                        var qq=document.getElementsByName("inputQQ")[0].value;
+                        var lon;
+                        var lat;
+                        lon = String(point.lng);
+                        lat = String(point.lat);
+                        $.ajax({
+                            type: "post",
+                            url: "http://localhost:8082/supdem/seller/seller",
+                            data: {sellername,password,name,phone,qq,address,lon,lat},
+                            dataType: "text",
+                            async: false,
+                            success: function () {
+                                $("#exampleModal").show();
+                            },
+                            error: function (errorMsg) {
+                                alert("error");
+                            }
+                        });
+                    }else{
+                        alert("您的地址格式不正确!");
+                    }
+                }, "湖北省");
+            })
+        })
+    </script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="panel panel-primary" style="border:solid #fff;margin-top:2%;position:relative;width:40%;left:30%;">
+        <div class="panel-heading" style="font-size:20px">注册</div>
+        <div class="panel-body">
+            <form>
+                <label>身份:</label>
+                <br>
+                <label>
+                    <input name="checkbox" onclick="checkbox1();" type="checkbox" value="user"> 个体
+                </label>
+                <label>
+                    <input name="checkbox" onclick="checkbox2();" checked="checked" type="checkbox" value="seller" style="margin-left:15px;"> 商户
+                </label>
+                <br>
+                <br>
+                <label for="Seller">用户名:</label>
+                <input type="text" id="Seller" name="inputSeller" class="form-control" placeholder="Seller name" required autofocus>
+                <br>
+                <label for="Password">密码:</label>
+                <input type="password" id="Password" name="inputPassword" class="form-control" placeholder="Password" required>
+                <br>
+                <label for="Name">昵称:</label>
+                <input type="text" id="Name" name="inputName" class="form-control" placeholder="Name" required>
+                <br>
+                <label for="Phone">电话:</label>
+                <input type="tel" id="Phone" name="inputPhone" class="form-control" placeholder="Phone" required>
+                <br>
+                <label for="QQ">QQ:</label>
+                <input type="text" id="QQ" name="inputQQ" class="form-control" placeholder="QQ" required>
+                <br>
+                <label for="Address">地址:</label>
+                <input type="text" id="Address" name="inputAddress" class="form-control" placeholder="Address" required>
+                <br>
+                <label id="register" for="submit" class="sr-only">OK</label>
+                <input type="button" id="submit" class="btn btn-primary btn-sm" style="width:60px;margin-right:15px;" value="OK">
+                <label for="Cancel" class="sr-only">Cancel</label>
+                <input onclick="window.location.href = 'mylogin.html';" type="button" id="Cancel" name="cancel" class="btn btn-default btn-sm" style="width:60px" value="Cancel">
+            </form>
+        </div>
+    </div>
+</div>
+<div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:50%;margin-top:20%;left:25%;right:25%;">
+            <div class="modal-header">
+                <h4 class="modal-title">注意</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href = 'login.html';">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You can sign in right now.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.location.href = 'login.html';">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

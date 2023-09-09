@@ -1,0 +1,3239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+        #l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+        #r-result{height:100%;width:20%;float:left;}
+        #allmap label {
+            max-width:none;
+        }
+    </style>
+
+    <!--百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&services=true&ak=4tPcrZcaduiSx5hSHGRvdAFO88gEKwKc"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/buttonstyle.css">
+    <link rel="stylesheet" href="css/bootstrap-spinner.css">
+
+    <!--新 Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/css/bootstrap-select.min.css">
+
+    <script type="text/javascript" src="js/jQuery.1.71.js" language="javascript"></script>
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!--<script src="js/bootstrap1.min.js"></script>-->
+    <script src="js/jquery.spinner.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/js/bootstrap-select.min.js"></script>
+
+    <!--为实现拖拽 引入下列两库-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+
+
+
+    <title>独立用户主页</title>
+</head>
+<body>
+
+
+<div id="wrapper" >
+    <div class="overlap"></div>
+    <!-- sidebar-wrapper -->
+    <nav class="navbar navbar-inverse navbar-fixed-top sidebar-wrapper" id="sidebar-wrapper1">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#" class="sidebar-header" style="color: #ffffff" onclick="addSellerMarker(1)">商家点单</a>
+            </li>
+        </ul>
+
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#" class="sidebar-header" style="color: #ffffff" onclick="addMarkerTypeAll(1)">购物订单</a>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'book',0)">书籍<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="book">
+
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'beauty',0)">化妆品<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="beauty">
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'cloth',0)">衣物类 <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="cloth">
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'life',0)">生活用品<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="life">
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'other',0)">其它服务<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="other">
+
+                </ul>
+            </li>
+
+        </ul>
+
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#" class="sidebar-header" style="color: #ffffff" onclick="addMarkerTypeAll(2)">跑腿订单</a>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'delivery',0)">快递跑腿<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="delivery">
+
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'buy',0)">代购<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="buy">
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'class',0)">代课<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="class">
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'sign',0)">代签到<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="sign">
+
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="addMarkerType(-1,'service',0)">其它服务<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="service">
+
+                </ul>
+            </li>
+
+        </ul>
+
+        <div style="position:absolute;right:10px;bottom:10px;z-index: 1">
+            <!-- 购物-->
+            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal1" ><i class="glyphicon glyphicon-star"></i></button>
+            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal2" ><i class="glyphicon glyphicon-shopping-cart"></i></button>
+
+            <!--*****************************************************************************新增按钮-->
+            <!--找商家下的单子-->
+            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal8" ><i class="glyphicon glyphicon-gift"></i></button>
+            <!--跑腿-->
+            <!--button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal5" ><i class="glyphicon glyphicon-send"></i></button-->
+
+            <!--发布-->
+            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal7" ><i class="glyphicon glyphicon-map-marker"></i></button>
+            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal3" ><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" class="btn btn-circle" data-toggle="modal" data-target="#exampleModal6" ><i class="glyphicon glyphicon-piggy-bank"></i></button>
+        </div>
+
+        <!-- 模态框1，愿望清单-->
+        <div class="modal fade overlap2" id="exampleModal1" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="exampleModalLabel1">愿望清单</h2>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">产品</th>
+                                <th style="text-align:center;">加购日期</th>
+                                <th style="text-align:center;">售价</th>
+                                <th style="text-align:center;">商品状态</th>
+                                <th style="text-align:center;">待操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain1">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模态框2，购物清单-->
+        <div class="modal fade overlap2" id="exampleModal2" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="exampleModalLabel2">交易清单</h2>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">名称</th>
+                                <th style="text-align:center;">日期</th>
+                                <th style="text-align:center;">价格</th>
+                                <th style="text-align:center;">状态</th>
+                                <th style="text-align:center;">待操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain2">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--*****************************************************************************新增模态框-->
+        <!-- 模态框8，商家下单清单-->
+        <div class="modal fade overlap2" id="exampleModal8" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="exampleModalLabel8">商家下单</h2>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">商品</th>
+                                <th style="text-align:center;">日期</th>
+                                <th style="text-align:center;">价格</th>
+                                <th style="text-align:center;">电话</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain8">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模态框5，接单跑腿-->
+        <!--div class="modal fade overlap2" id="exampleModal5" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="exampleModalLabel5">愿望清单</h2>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">产品</th>
+                                <th style="text-align:center;">加购日期</th>
+                                <th style="text-align:center;">售价</th>
+                                <th style="text-align:center;">商品状态</th>
+                                <th style="text-align:center;">待操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain3">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div-->
+
+        <!-- 模态框6，发布清单-->
+        <div class="modal fade overlap2" id="exampleModal6" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document" style="width:800px">
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="exampleModalLabel6">发布清单</h2>
+                    </div>
+                    <div class="modal-body" style="overflow-y: scroll;height: 400px;">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">名称</th>
+                                <!--th style="text-align:center;">日期</th-->
+                                <th style="text-align:center;">价格</th>
+                                <th style="text-align:center;">地址</th>
+                                <th style="text-align:center;">状态</th>
+                                <th style="text-align:center;">待操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain4">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模态框7，地址管理-->
+        <div class="modal fade overlap2" id="exampleModal7" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                        <h2 class="modal-title" id="exampleModalLabel7">地址管理</h2>
+                        <button id="ButtonAddress" style="display:inline-block"class="btn btn-primary" data-toggle="modal" data-target="#myModalAddress">
+                            添加新地址
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">地址</th>
+                                <th style="text-align:center;">待操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain5">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade overlap2" id="myModalAddress" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabelAddress">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                        <h2 class="modal-title" id="exampleModalLabeAdress">我的地址</h2>
+
+                    </div>
+
+                    <form id="myFormAddress" action="http://localhost:8082/supdem/product/add" method="PUT" target="submitFrameAddress">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-nameAddress" class="control-label">地址</label>
+                                <input type="text" class="form-control" id="recipient-nameAddress" name="address">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="SubmitMyAddress()">提交地址</button>
+                    </div>
+                    <iframe  id="submitFrameAddress" style="display: none;width:0; height:0" name="submitFrameAddress"  src="about:blank"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 模态框3，提交表单添加新商品-->
+        <div class="modal fade overlap2" id="exampleModal3" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h1 class="modal-title" id="exampleModalLabel3">发布订单</h1>
+                    </div>
+                    <form id="myForm" action="http://localhost:8082/supdem/product/add" method="POST" target="submitFrame">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-name1" class="control-label">名称</label>
+                                <input type="text" class="form-control" id="recipient-name1" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name2" class="control-label">价格</label>
+                                <input type="text" class="form-control" id="recipient-name2" name="price">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name3" class="control-label">地址</label>
+                                <input type="text" class="form-control" id="recipient-name3" name="address" list="addresses">
+                                <datalist id="addresses">
+                                </datalist>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recipient-name4" class="control-label">类型</label>
+                                <div id="recipient-name4">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios1" value="book"> 书籍
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios2"  value="beauty"> 化妆品
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios3" value="cloth" > 衣物
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios4"  value="life"> 生活用品
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios5"  value="other"> 其它物品
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios6" value="delivery"> 代取快递
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios7"  value="buy"> 代购
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios8" value="sign" > 代签到
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios9"  value="class"> 代课
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="type" id="optionsRadios10"  value="service" checked> 其它服务
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">描述</label>
+                                <textarea class="form-control" id="message-text" name="discription"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="SubmitMyform()">提交订单</button>
+                            <!--input type="submit" value="提交订单" class="btn btn-primary"-->
+                        </div>
+                    </form>
+                    <iframe  id="submitFrame" style="display: none;width:0; height:0" name="submitFrame"  src="about:blank"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 模态框4，下单到商家-->
+        <!--*****************************************************************************修改模态框-->
+        <!-- 模态框4，下单到商家-->
+        <div class="modal fade overlap2" id="exampleModal4" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h1 class="modal-title" id="exampleModalLabel4"></h1>
+                    </div>
+                    <form id="myForm2" onsubmit="return false" action="#" method="POST" target="submitFrame2">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-name4" class="control-label">选择商品</label>
+                                <!--改*****************************************************************************************-->
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;">
+                                            <a type="button" class="btn btn-primary" id="GoodsAdd" onclick="addTB()"><i class="glyphicon glyphicon-plus"></i></a>
+                                            <a type="button" class="btn btn-default" id="GoodsDel" onclick="deleteTB()"><i class="glyphicon glyphicon-minus"></i></a>
+                                        </th>
+                                        <th style="text-align:center;">
+                                            <select class="selectpicker" data-live-search="true" id='sel'>
+
+                                            </select>
+                                        </th>
+                                        <th style="text-align:center;">
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" class="form-control text-center" value="1" data-rule="quantity" id="number">
+                                                <div class="input-group-addon">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbMain9">
+
+                                    </tbody>
+                                </table>
+                                <!--改*********************************************************************-->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recipient-name1" class="control-label">地址</label>
+                                <input type="text" class="form-control" id="recipient-name6" name="address">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">备注</label>
+                                <textarea class="form-control" id="message-text2" name="remarkers"></textarea>
+                            </div>
+                            <div style="right: 0px" id="money"></div>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="SubmitSeller()">提交订单</button>
+                            <!--input type="submit" value="提交订单" class="btn btn-primary"-->
+                        </div>
+                    </form>
+                    <iframe  id="submitFrame2" style="display: none;width:0; height:0" name="submitFrame"  src="about:blank"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+    </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <button type="button" class="hamburger is-open animated fadeInLeft" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+
+<div id="allmap"></div>
+<div class="input-group col-md-3" style="width:30%;top:3%;right:2.5%;position:fixed">
+    <!--<button id="Button1" onclick=""><span class="glyphicon glyphicon-chevron-right"></span>
+    </button>-->
+    <input id="key" type="text" style="display: inline-block" class="form-control" placeholder="返回关键字的检索结果"/>
+    <span class="input-group-btn">
+           <button id="Button2" style="display: inline-block" onclick="printInputValue()" class="btn btn-info btn-search">查找</button>
+    </span>
+    <!--<button id="Button6" style="display: none"><span class="glyphicon glyphicon-chevron-left"></span>
+    </button>-->
+</div>
+
+<!--<div class="input-group col-md-3" style="width:40%;top:3.5%;left:36%;position:fixed">
+    <button id="Button3" style="display: none" onclick="ReturnOri()" class="btn btn-primary">还原</button>
+    <button id="Button4" style="display: none"class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        查看导航结果
+    </button>
+    <button style="display: none" onclick="openHeatmap()" class="btn btn-primary" id="HeatmapBtn">订单密集程度</button>
+    <button id="Button5" style="display: none" class="btn btn-primary" data-toggle="modal" data-target="#myModalAnalysis">
+        供需群图表分析
+    </button>
+    <button id="Button7" style="display: none" onclick="MultiPathButton()" class="btn btn-primary" >
+        开启多点规划模式
+    </button>
+    <button id="Button6" style="display: none"><span class="glyphicon glyphicon-chevron-left"></span>
+    </button>
+    <button id="Button8" onclick="MultiPlan()" style="display:none" class="btn btn-primary" >
+        开始规划
+    </button>
+    <button onclick="ChangeWay();PlanToHere0()" class="btn btn-primary" id="Routeshift" style="display: none">切换</button>
+</div>-->
+
+<div id="container">
+    <div id="dock">
+        <ul>
+            <li>
+            <li>
+                <span>初始化</span> <button onclick="ReturnOri()" style="border: none;background: transparent;"><img src="photos/initial.png"></button>
+            </li>
+            <li>
+                <span>调整订单显示</span> <button onclick="ShowAble()" style="border: none;background: transparent;"><img src="photos/shopping-bag.png"></button>
+            </li>
+            <li>
+                <span>供需群图表分析</span> <button data-toggle="modal" data-target="#myModalAnalysis" style="border: none;background: transparent;"><img src="photos/barchart.png"></button>
+            </li>
+            <li>
+                <span>订单密集程度</span> <button onclick="openHeatmap()" style="border: none;background: transparent;"><img src="photos/teamwork.png"></button>
+            </li>
+            <li>
+                <span>查看导航结果</span> <button data-toggle="modal" data-target="#myModal" style="border: none;background: transparent;"><img src="photos/result.png"></button>
+            </li>
+            <li>
+                <span id="buttonMulti">开启多点规划</span> <button onclick="MultiPathButton()" style="border: none;background: transparent;"><img src="photos/route.png"></button>
+            </li>
+            <li>
+                <span>开始规划</span> <button id="ButtonStartPlan" onclick="MultiPlan()" style="display:none;border: none;background: transparent;"><img src="photos/search.png"></button>
+            </li>
+            <li>
+                <span>切换</span> <button onclick="ChangeWay();PlanToHere0()" id="Routeshift" style="display: none;border: none;background: transparent;"><img src="photos/change.png"></button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 导航模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="modalTitle" onmouseout="removeModalBackdrop()">
+    <div class="modal-dialog" id="modalDialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    导航路线
+                </h4>
+            </div>
+
+            <div class="modal-body" style="overflow-y: scroll;height: 400px">
+                <div id="my-result"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" onclick="ChangeWay();PlanToHere0()">切换</button>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 分析模态框（Modal） -->
+<div id="myModalAnalysis" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="modalTitle">
+                    供需群图表分析
+                </h4>
+            </div>
+            <div class="modal-body" style="overflow-y:scroll;height:400px">
+                <div><input></div>
+                <div><input></div>
+            </div>
+            <div class="modal-footer">
+                <button type='button' class='btn btn-primary previous-page hidden'>
+                    上一页
+                </button>
+                <button type="button" class="btn btn-primary next-page">
+                    下一页
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
+                <label class="page-index" hidden>0</label>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!--地址管理-->
+<script type="text/javascript">
+    //需要添加的数据内容,可以通过ajax请求获取
+    var cities = [
+        {label:"xian",value:"西安"},
+        {label:"hubei",value:"湖北"},
+        {label:"wuhai",value:"武汉"}
+    ];
+
+    function loadcities(){
+        /*var table=document.getElementById("tbMain5");
+            var rows=table.rows;
+            //console.log(rows.length);
+            for(var i=0;i<rows.length;i++){
+            for(var j=0;j<rows[i].cells.length-1;j++){
+            var value=rows[i].cells[j].innerHTML;
+            //console.log(rows[i].cells[j].innerHTML);*/
+        $("#addresses").empty();
+        for(var i=0;i<addressData.length;i++){
+            $("#addresses").append('<option value="'+addressData[i]+'"></option>');
+        }
+    }
+    //页面加载完时加载此函数
+</script>
+
+<!--分析模态框拖拽-->
+<script>
+    //$('#myModalAnalysis').draggable();
+    function removeModalBackdrop() {
+        $(".modal-backdrop").remove();
+    }
+
+</script>
+
+<!--页面样式-->
+<script type="text/javascript">
+
+    $("body").on('click','[datastopPropagation]',function (e) {
+        e.stopPropagation();
+    });
+
+    $(document).ready(function() {
+        var trigger = $('.hamburger'),
+            overlap=$('.overlap'),
+            isClosed = false;
+
+        trigger.click(function(event) {
+            hamburger_cross();
+        });
+
+        function hamburger_cross(){
+            if (isClosed == true) {
+                overlap.hide();
+                trigger.removeClass('is-closed');
+                trigger.addClass('is-open');
+                isClosed = false;
+
+            } else {
+                overlap.show();
+
+                trigger.removeClass('is-open');
+                trigger.addClass('is-closed');
+                isClosed = true;
+            }
+        }
+
+
+        $('[data-toggle="offcanvas"]').click(function () {
+            $('#wrapper').toggleClass('toggled');
+        });
+    });
+
+
+</script>
+
+<!--登录-->
+<script type="text/javascript">
+
+    var Users=[];
+
+    $.ajax({
+        type:"get",
+        url:"http://localhost:8082/supdem/user/all",
+        data:{},
+        dataType : "json",
+        async: false,
+        success:function (data) {
+            for(var i=0;i<data.length;i++){
+                //if(data[i].userId==userId){ //注意啦  这里要改
+                    Users.push({
+                        My_id:i,
+                        userId:data[i].userId,
+                        username:data[i].username,
+                        password:data[i].password,
+                        name:data[i].name,
+                        phone:data[i].phone,
+                        qq:data[i].qq,
+                        address1:data[i].address1,
+                        address2:data[i].address2,
+                        address3:data[i].address3
+                    });
+                //}
+            }
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("请求数据失败!");
+        }
+    });
+
+    var username = "Gui";
+    var userId = 1;
+    var url=location.search;
+    var Request = new Object();
+    if(url.indexOf("?")!=-1) {
+        var str = url.substr(1);　//去掉?号
+        strs= str.split("&");
+        for(var i=0;i<strs.length;i++) {
+            Request[strs[i].split("=")[0]]=unescape(strs[ i].split("=")[1]);
+        }
+    }
+    //alert(Request["userid"]);
+    if(Request["userid"]){
+        username = Request["username"];
+        userId = Number(Request["userid"]);
+    }
+    alert("欢迎 "+username+" 登录");
+
+    //userId = Users[0].userId;
+    //username=Users[0].name;//name是昵称
+
+
+</script>
+
+<!--底图地图-->
+<script type="text/javascript">
+
+    var map = new BMap.Map("allmap");
+
+    var styleJson=[{
+        "featureType": "poilabel",
+        "elementType": "labels.icon",
+        "stylers": {
+            "visibility": "off"
+        }
+    }];
+
+    map.centerAndZoom(new BMap.Point(114.37292,30.543804), 16);  //初始中心点级别 中国。
+    map.enableScrollWheelZoom(); //启用滚轮放大缩小
+    map.enableKeyboard();//启用键盘上下左右键移动地图
+    map.addControl(new BMap.NavigationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,type:BMAP_NAVIGATION_CONTROL_LARGE,offset:new BMap.Size(0,60)}));
+    map.addControl(new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT,isOpen:1}));
+    map.enableScrollWheelZoom();
+    map.addControl(new BMap.MapTypeControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
+    map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT}));
+    map.setMapStyle({styleJson:styleJson});
+
+</script>
+
+<!--画出用户位置-->
+<script>
+    var changeID=0;
+    var currentpoint = new BMap.Point(114.36535,30.534151);
+    var endpoint = new BMap.Point(114.36535,30.534151);
+    var currenticonImg = new BMap.Icon("photos/marker1.png", new BMap.Size(50,50));
+    function createUserWindow() {
+        var iw;
+        iw = new BMap.InfoWindow(
+            "<b>"+"我当前位置"+"</b><br>"+
+            "<div align='right'>"+
+            "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+            "<button type=\"button\" class=\"btn btn-default\" onclick=\"GetBuffer()\"><span class=\"glyphicon glyphicon-asterisk\"></span>附近订单</button>" +
+            "</div> </div>"
+        );
+        return iw;
+    }
+    function AddCurrentPoint() {
+        var currentmarker = new BMap.Marker(currentpoint,{icon:currenticonImg});
+        currentmarker.disableMassClear();
+        var _iw = createUserWindow();
+        var _marker = currentmarker;
+        _marker.addEventListener("click",function(){
+            this.openInfoWindow(_iw);
+        });
+        map.addOverlay(currentmarker);
+        map.centerAndZoom(currentpoint,16);
+    }
+    AddCurrentPoint();
+</script>
+
+<!--画统计图-->
+<script>
+    /**
+     *
+     * @param modalSelect modal选择符，本例为“#myModal”
+     * @param modalDataArray html代码字符串数组
+     * @param currentPageIndex 当前页码
+     * @param direction 1表示下一页方向，-1表示上一页方向
+     */
+    function controlPageToggle(modalSelect, modalDataArray, currentPageIndex, direction) {
+        var arrayLength = modalDataArray.length;
+        if (arrayLength <= 1)
+            return;
+
+        if (direction == 1) {
+            //如果当前页是倒数第二页，则将下一页设置为尾页
+            if (currentPageIndex == arrayLength - 2) {
+                $(modalSelect + " " + ".next-page").addClass("hidden");
+            }
+
+            //如果当前页是首页，添加上一页
+            if (currentPageIndex == 0 && arrayLength > 1) {
+                $(modalSelect + " " + ".previous-page").removeClass("hidden");
+            }
+            //更换modal-body和页码
+            $(modalSelect + " " + ".page-index").text((++currentPageIndex).toString());
+            $(modalSelect + " " + ".modal-body").html(modalDataArray[currentPageIndex]);
+        }
+        else {
+            //如果当前页是尾页
+            if (currentPageIndex == arrayLength - 1) {
+                $(modalSelect + " " + ".next-page").removeClass("hidden");
+            }
+
+            //如果当前页是正数第二页,则将上一页设置为首页
+            if (currentPageIndex == 1) {
+                $(modalSelect + " " + ".previous-page").addClass("hidden");
+            }
+            //更换modal-body和页码
+            $(modalSelect + " " + ".page-index").text((--currentPageIndex).toString());
+            $(modalSelect + " " + ".modal-body").html(modalDataArray[currentPageIndex]);
+        }
+
+    }
+    /**
+     *
+     * @param modalSelect modal选择符
+     * @param modalDataArray html代码字符串数组
+     * @param modalCallback modal回调函数
+     */
+    function moadlDataControl(modalSelect, modalDataArray, modalCallback) {
+        //初始化模态框首页数据
+        $(modalSelect + " " + ".modal-body").html(modalDataArray[0]);
+        if (modalDataArray.length <= 1) {
+            $(modalSelect + " " + ".next-page").text("提交");
+        }
+
+        //点击下一页
+        $(modalSelect + " " + ".next-page").click(function () {
+            //调用回调函数
+            // modalCallback();
+            // if ($(this).text() == "提交") {
+            //   $(modalSelect).modal('hide');
+            //   return;
+            //}
+            //获取当前页码
+            var currentPageIndex = parseInt($(modalSelect + " " + ".page-index").text());
+            controlPageToggle(modalSelect, modalDataArray, currentPageIndex, 1);
+        });
+
+        //点击上一页
+        $(modalSelect + " " + ".previous-page").click(function () {
+            //获取当前页码
+            var currentPageIndex = parseInt($(modalSelect + " " + ".page-index").text());
+            controlPageToggle(modalSelect, modalDataArray, currentPageIndex, -1);
+        });
+
+        //关闭模态框时，重置为首页
+        $(modalSelect).on('hidden.bs.modal', function () {
+            $(modalSelect + " " + ".page-index").text((0).toString());
+            if (modalDataArray.length <= 1) {
+                $(modalSelect + " " + ".next-page").text("提交");
+            }
+            else {
+                $(modalSelect + " " + ".next-page").text("下一页");
+            }
+            $(modalSelect + " " + ".modal-body").html(modalDataArray[0]);
+            $(modalSelect + " " + ".previous-page").addClass("hidden");
+        })
+    }
+    function modalCallback() {
+        alert("调用回调函数");
+    }
+    $(function () {
+        //定义模态框数据
+        var modalDataArray = new Array("<img src='需要展示的图表\\全公告词云.png' alt='' style='width:100%;height:100%'>",
+            "<iframe id='WordArt' width='100%' height='100%' frameborder=0 src='需要展示的图表\\AllWordArt.html'></iframe>",
+            "<iframe id='AllWeekDistr' width='100%' height='100%' frameborder=0 src='需要展示的图表\\AllWeekDistr.html'></iframe>",
+            "<iframe id='AllDayStatis' width='100%' height='100%' frameborder=0 src='需要展示的图表\\AllDayStatis.html'></iframe>",
+            "<iframe id='Type' width='100%' height='100%' frameborder=0 src='需要展示的图表\\供需平台交易类型.html'></iframe>",
+            "<iframe id='relation' width='100%' height='100%' frameborder=0 src='需要展示的图表\\群人数与聊天记录数的关系.html'></iframe>",
+            "<img src='需要展示的图表\\文理学部跳蚤市场交互网络.png' alt='' style='width:100%;height:100%'>",
+            "<iframe id='WordArt' width='100%' height='100%' frameborder=0 src='需要展示的图表\\各群每周聊天分布.html'></iframe>",
+            "<iframe id='AllWeekDistr' width='100%' height='100%' frameborder=0 src='需要展示的图表\\各群每日聊天分布.html'></iframe>",
+            "<iframe id='AllDayStatis' width='100%' height='100%' frameborder=0 src='需要展示的图表\\各个群前十聊天数.html'></iframe>"
+        );
+        moadlDataControl("#myModalAnalysis", modalDataArray, modalCallback);
+    });
+</script>
+
+<!--导航和找附近关键地点功能  新增的-->
+<script>
+
+    function ChangeWay() {
+        changeID++;
+        changeID=changeID%3;
+    }
+
+    function PlanToHere(endlng,endlat) {
+        endPoint = new BMap.Point(endlng,endlat);
+        PlanToHere0()
+    }
+
+    function PlanToHere0() {
+        var p1 = currentpoint;
+        var p2 = endPoint;
+        map.clearOverlays();
+        if(changeID==0){
+            var walking = new BMap.WalkingRoute(map, {renderOptions:{map: map, panel:"my-result",autoViewport: true}});
+            walking.search(p1, p2);
+        }
+        else if(changeID==1){
+            var transit = new BMap.TransitRoute(map, {renderOptions: {map: map,panel:"my-result", autoViewport: true}});
+            transit.search(p1, p2);
+        }
+        else{
+            var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "my-result", autoViewport: true,enableDragging:true}});
+            driving.search(p1, p2);
+        }
+        var change_cancel = document.getElementById("Routeshift");
+        change_cancel.style.display = "block";
+        //$('#myModal').modal('toggle');
+    }
+    function printInputValue() {
+        value = document.getElementById("key").value;
+        map.centerAndZoom(currentpoint, 15);
+        var circle = new BMap.Circle(currentpoint,600,{fillColor:"#FFEFDB", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        map.panTo(currentpoint);
+        map.clearOverlays();
+        //alert('您的位置：'+r.point.lng+','+r.point.lat);
+        map.addOverlay(circle);
+        var local = new BMap.LocalSearch(map, {
+            renderOptions: {map: map,panel: "my-result",enableDragging:true},
+            autoViewport: false
+        });
+        local.searchNearby(value,currentpoint,500);
+        var Isopen=0;
+        local.setInfoHtmlSetCallback(function(poi){
+            if(Isopen!=0){
+                PlanToHere(poi.point.lng,poi.point.lat);
+            }
+            Isopen=1;
+        })
+        /*map.addEventListener('dblclick', function (e) {
+            map.clearOverlays();    //清除地图上所有覆盖物
+            PlanToHere(e.point.lng,e.point.lat);
+        });*/
+        //关于状态码
+        //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+        //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+        //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+        //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+        //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+        //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+        //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+        //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+        //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+    }
+    $(document).ready(function(){
+
+        $("#modalDialog").draggable();//为模态对话框添加拖拽
+        $("#myModal").css("overflow", "hidden");//禁止模态对话框的半透明背景滚动
+
+    })
+</script>
+
+<!--路径规划-->
+<script>
+
+    var ProductPosition=[];
+    /*function GetProductPosition(){
+        radius=0.5;
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/Buffer?"+"buffer="+radius+"&pointlat="+currentpoint.lat+"&pointlng="+currentpoint.lng,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                ProductPosition=[];
+                ProductPosition.push(currentpoint);
+                for(let i=0;i<data.length;i++){
+                    ProductPosition.push(new BMap.Point(data[i].lng,data[i].lat))
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        });
+    }*/
+    var distanceMatrix=new Array();
+    //GetProductPosition();
+    ProductPosition.push(currentpoint);
+    function GetPosition(lng,lat){
+        ProductPosition.push(new BMap.Point(lng,lat));
+        alert("加点成功");
+    }
+    //GetPosition(114.36392,30.543804);
+    //GetPosition(114.364044,30.537231);
+    function InitMatrix(){
+        for(var i=0;i<ProductPosition.length;i++)
+        {
+            distanceMatrix[i]=new Array(i);
+            for(var j=0;j<ProductPosition.length;j++)
+            {
+                distanceMatrix[i][j]=0;
+            }
+        }
+        distanceMatrix[ProductPosition.length-1][ProductPosition.length-1] = 0;
+    }
+
+    function GetDistance(Point1,Point2,i,j)
+    {
+        var walking=new BMap.WalkingRoute(map);
+        walking.search(Point1,Point2);
+        walking.setSearchCompleteCallback(function(){
+                var pts=walking.getResults().getPlan(0).getRoute(0).getPath();
+                var Points=[];
+                for(var k=0;k<pts.length;k++)
+                {
+                    Points.push(new BMap.Point(pts[k].lng,pts[k].lat));
+                }
+                var polyline=new BMap.Polyline(Points);
+                distanceMatrix[i][j]=BMapLib.GeoUtils.getPolylineDistance(polyline);
+            }
+        );
+        var walking1=new BMap.WalkingRoute(map);
+        walking1.search(Point2,Point1);
+        walking1.setSearchCompleteCallback(function(){
+                var pts=walking1.getResults().getPlan(0).getRoute(0).getPath();
+                var Points=[];
+                for(var k=0;k<pts.length;k++)
+                {
+                    Points.push(new BMap.Point(pts[k].lng,pts[k].lat));
+                }
+                var polyline=new BMap.Polyline(Points);
+                distanceMatrix[j][i]=BMapLib.GeoUtils.getPolylineDistance(polyline);
+            }
+        )
+    }
+
+    function GetDisMatrix(){
+        for(var i=0;i<ProductPosition.length-1;i++)
+        {
+            distanceMatrix[i][i]=0;
+            for(var j=i+1;j<ProductPosition.length;j++)
+            {
+                GetDistance(ProductPosition[i],ProductPosition[j],i,j);
+            }
+        }
+    }
+
+    var pathResult=[];
+
+    function GetPathResult(){
+        $.ajax({
+            url:"http://localhost:8082/supdem/multi/getMultiPath",
+            data:JSON.stringify(distanceMatrix),
+            type:"post",
+            dataType:"json",
+            contentType:"application/json",
+            success:function(result){
+                pathResult=result;
+            },
+            error:function(msg){
+                alert("请求数据失败!");
+            }
+        })
+    };
+
+    function MultiPlan(){
+        if(ProductPosition.length<3){
+            alert("点位数不足");
+            return;
+        }
+        InitMatrix();
+        GetDisMatrix();
+        GetPathResult();
+        walking=new BMap.WalkingRoute(map);
+        var lab=new BMap.Label("起始点",{position:ProductPosition[0]});
+        map.addOverlay(lab);
+        //var marker1=new BMap.Marker(ProductPosition[0]);
+        //map.addOverlay(marker1);
+        for(var i=1;i<pathResult.length-1;i++)
+        {
+            var string=i;
+            var lab=new BMap.Label("途经点"+string,{position:ProductPosition[pathResult[i]]});
+            //var marker=new BMap.Marker(ProductPosition[pathResult[i]]);
+            map.addOverlay(lab);
+            //map.addOverlay(marker);
+            /*walking.setSearchCompleteCallback(function(){
+            var pts=walking.getResults().getPlan(0).getRoute(0).getPath();
+            var Points=[];
+            for(var i=0;i<pts.length;i++)
+            {
+            Points.push(new BMap.Point(pts[i].lng,pts[i].lat));
+            }
+            var polyline=new BMap.Polyline(Points);
+            map.addOverlay(polyline);
+ }
+ )*/
+        }
+        for(var i=0;i<pathResult.length-1;i++)
+        {
+            walking.search(ProductPosition[pathResult[i]],ProductPosition[pathResult[i+1]]);
+        }
+        walking.setSearchCompleteCallback(function(){
+            var pts = walking.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+            var polyline = new BMap.Polyline(pts);
+            map.addOverlay(polyline);
+        });
+        //ProductPosition=[];
+    }
+
+    var buttonValue = 0;
+    function MultiPathButton(){
+        var buttonMuilti = document.getElementById("buttonMulti");
+        var buttonMuilti1 = document.getElementById("ButtonStartPlan");
+        if(buttonValue==0){
+            buttonValue=1;
+            buttonMuilti.innerText = "关闭多点规划";
+            buttonMuilti1.style.display="inline-block";
+        }
+        else{
+            buttonValue = 0;
+            buttonMuilti.innerText = "开启多点规划";
+            buttonMuilti1.style.display="none";
+        }
+
+
+    }
+
+</script>
+
+<!--商品列表和地图上的window-->
+<script type="text/javascript">
+
+    var mJson = [];
+    var bJson = [];
+    var ableJson = [];
+    var OldJson = [];
+    var IsBuffer = 0;
+
+
+    var picfile1;
+    picfile1="photos/pick.png";//选中的点
+    var picfile2;
+    picfile2="photos/false.png";//不可购买
+    var picfile3;
+    picfile3="photos/ok.png";//可购买
+    var picfile5;
+    picfile5="photos/Sfalse.png";//不可跑腿
+    var picfile6;
+    picfile6="photos/Sok.png";//可跑腿
+
+    $.ajax({
+        type:"get",
+        url:"http://localhost:8082/supdem/product/all",
+        data:{},
+        dataType : "json",
+        async: false,
+        success:function (data) {
+            for(var i=0;i<data.length;i++){
+                mJson.push({
+                    My_id:i,
+                    productId:data[i].productId,
+                    name:data[i].name,
+                    price:data[i].price,
+                    discription:data[i].discription,
+                    address:data[i].address,
+                    type:data[i].type,
+                    available:data[i].available,
+                    lng:data[i].lng,
+                    lat:data[i].lat,
+                    sellerId:data[i].sellerId,
+                    buyerId:data[i].buyerId,
+                    sellerPhone:"",
+                    sellerQQ:"",
+                    buyerPhone:"",
+                    buyerQQ:""
+                });
+                createOption(mJson[i],mJson[i].type);
+            }
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("请求数据失败!");
+        }
+    });
+
+    //补数据
+    for(var i=0;i<mJson.length;i++){
+        for(var j=0;j<Users.length;j++){
+            if(mJson[i].buyerId==Users[j].userId){
+                mJson[i].buyerPhone=Users[j].phone;
+                mJson[i].buyerQQ=Users[j].qq
+            }
+            if(mJson[i].sellerId==Users[j].userId){
+                mJson[i].sellerPhone=Users[j].phone;
+                mJson[i].sellerQQ=Users[j].qq
+            }
+        }
+    }
+
+    addMarkerAll(-1);//全部绘制
+
+    //创建列表,data是一个mJson数据
+    function createOption(data,type) {
+            var lil=document.createElement('li');
+            lil.innerHTML='<a onclick="addMarker('+(data.My_id)+')" datastopPropagation="true"'+'>'+data.name+'</a>';
+            lil.setAttribute("id",type+data.productId.toString());
+            document.getElementById(type).appendChild(lil);
+    }
+
+    //创建点击订单出来的marker,输入点击的mJson的id
+    function addMarker(My_id){
+        var myJson = mJson;
+        if(IsBuffer==1){
+            myJson = bJson;
+        }
+        map.clearOverlays();
+        var allOverlay = map.getOverlays();
+        for (var j = 0; j < allOverlay.length; j++) {
+            allOverlay[j].enableMassClear();
+        }
+
+        map.clearOverlays();
+        //addSellerMarker(0);
+        //addMarkerAll(My_id);//除去选中的点，其它点都绘制出来
+
+        addMarkerType(My_id,myJson[My_id].type,0);
+        var markers=[];
+
+        if(My_id>-1){
+            var point = new BMap.Point(myJson[My_id].lng,myJson[My_id].lat);
+            var iconImg = new BMap.Icon(picfile1, new BMap.Size(50,50));
+            var marker = new BMap.Marker(point,{icon:iconImg});
+            markers.push(marker);
+            marker.disableMassClear();
+            map.addOverlay(marker);
+            map.centerAndZoom(point,16);
+            var iw=createInfoWindow(My_id);
+            map.openInfoWindow(iw,point);
+            (function(){
+                marker.addEventListener("click",function(){
+                    //this.openInfoWindow(iw);
+                    var iw=createInfoWindow(My_id);
+                    map.openInfoWindow(iw,point);
+                });
+            })
+            ()
+        }
+        AddCurrentPoint();
+    }
+
+    //创建marker
+    function addMarkerAll(flag){
+        var myJson = mJson;
+        if(IsBuffer==1){
+            myJson = bJson;
+        }
+        map.clearOverlays();
+        var allOverlay = map.getOverlays();
+        for (var j = 0; j < allOverlay.length; j++) {
+            allOverlay[j].enableMassClear();
+        }
+        map.clearOverlays();
+        for(var i=0;i<myJson.length;i++){
+            if(i!=flag){
+                var json = myJson[i];
+                var point = new BMap.Point(json.lng,json.lat);
+                var iconImg;
+                if(myJson[i].available == "0")
+                {
+                    if(myJson[i].type=="delivery" || myJson[i].type=="buy" || myJson[i].type=="sign" || myJson[i].type=="class" || myJson[i].type=="service" )
+                    {iconImg = new BMap.Icon(picfile5, new BMap.Size(50,50));}
+                    else {iconImg = new BMap.Icon(picfile2, new BMap.Size(50,50));}
+                }
+                if(myJson[i].available == "1")
+                {
+                    if(myJson[i].type=="delivery" || myJson[i].type=="buy" || myJson[i].type=="sign" || myJson[i].type=="class" || myJson[i].type=="service" )
+                    {iconImg = new BMap.Icon(picfile6, new BMap.Size(50,50));}
+                    else {iconImg = new BMap.Icon(picfile3, new BMap.Size(50,50));}
+                }
+
+                var marker = new BMap.Marker(point,{icon:iconImg});
+                marker.disableMassClear();
+                var iw = createInfoWindow(i);
+                map.addOverlay(marker);
+
+                (function(){
+                    var index = i;
+                    var _marker = marker;
+                    _marker.addEventListener("click",function(){
+                        var _iw = createInfoWindow(index);
+                        this.openInfoWindow(_iw);
+                    });
+                })
+                ()
+            }
+        }
+        AddCurrentPoint();
+    }
+
+    //创建InfoWindow
+    function createInfoWindow(i){
+        var myJson = mJson;
+        if(IsBuffer==1){
+            myJson = bJson;
+        }
+        var json = myJson[i];
+        var iw;
+        if(json.available=="1"){
+            if(myJson[i].type=="delivery" || myJson[i].type=="buy" || myJson[i].type=="sign" || myJson[i].type=="class" || myJson[i].type=="service" ){
+                if(json.sellerId!=userId){
+                    if(buttonValue==0){
+                        iw = new BMap.InfoWindow(
+                            "<b>"+json.name+"</b><br>"+
+                            "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                            "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                            "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                            "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                            "<div align='right'>"+
+                            "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"PlanToHere("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>导航</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" style = \"display: none\" onclick=\"GetPosition("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>加点</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>接单</button>"+
+                            "</div> </div>"
+                        );
+                    }
+                    else{
+                        iw = new BMap.InfoWindow(
+                            "<b>"+json.name+"</b><br>"+
+                            "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                            "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                            "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                            "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                            "<div align='right'>"+
+                            "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                            "<button type=\"button\" class=\"btn btn-default\" style = \"display: none\" onclick=\"PlanToHere("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>导航</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"GetPosition("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>加点</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>接单</button>"+
+                            "</div> </div>"
+                        );
+                    }
+                }
+                else{
+                    iw = new BMap.InfoWindow(
+                        "<b>"+json.name+"</b><br>"+
+                        "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                        "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                        "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                        "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                        "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                        "<div align='right'>"+
+                        "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                        "<button type=\"button\" class=\"btn btn-default\"  disabled='disabled' onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>接单</button>"+
+                        "</div> </div>"
+                    );
+                }
+            }
+            else {
+                if(json.sellerId!=userId){
+                    if(buttonValue==0){
+                        iw = new BMap.InfoWindow(
+                            "<b>"+json.name+"</b><br>"+
+                            "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                            "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                            "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                            "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                            "<div align='right'>"+
+                            "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"PlanToHere("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>导航</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\"  style = \"display: none\"  onclick=\"GetPosition("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>加点</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"SQLaddData1("+json.productId+")\"><span class=\"glyphicon glyphicon-star\"></span>购物车</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon-shopping-cart\"></span>立即购买</button>" +
+                            "</div> </div>"
+                        );
+                    }
+                    else{
+                        iw = new BMap.InfoWindow(
+                            "<b>"+json.name+"</b><br>"+
+                            "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                            "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                            "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                            "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                            "<div align='right'>"+
+                            "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                            "<button type=\"button\" class=\"btn btn-default\"  style = \"display: none\"  onclick=\"PlanToHere("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>导航</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"GetPosition("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>加点</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"SQLaddData1("+json.productId+")\"><span class=\"glyphicon glyphicon-star\"></span>购物车</button>"+
+                            "<button type=\"button\" class=\"btn btn-default\" onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon-shopping-cart\"></span>立即购买</button>" +
+                            "</div> </div>"
+                        );
+                    }
+                }
+                else{
+                    iw = new BMap.InfoWindow(
+                        "<b>"+json.name+"</b><br>"+
+                        "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                        "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                        "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                        "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                        "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                        "<div align='right'>"+
+                        "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                        "<button type=\"button\" class=\"btn btn-default\" disabled='disabled' onclick=\"SQLaddData1("+json.productId+")\"><span class=\"glyphicon glyphicon-star\"></span>购物车</button>"+
+                        "<button type=\"button\" class=\"btn btn-default\" disabled='disabled' onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon-shopping-cart\"></span>立即购买</button>" +
+                        "</div> </div>"
+                    );
+                }
+
+            }
+            return iw;
+        }
+
+        if(json.available=="0"){
+
+            if(myJson[i].type=="delivery" || myJson[i].type=="buy" || myJson[i].type=="sign" || myJson[i].type=="class" || myJson[i].type=="service" ){
+                iw = new BMap.InfoWindow(
+                    "<b>"+json.name+"</b><br>"+
+                    "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                    "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                    "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                    "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                    "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                    "<div align='right'>"+
+                    "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                    "<button type=\"button\" class=\"btn btn-default\" disabled='disabled' onclick=\"SQLaddData2("+json.productId+")\"><span class=\"glyphicon glyphicon--shopping-cart\"></span>接单</button>"+
+                    "</div> </div>"
+                );
+            }
+            else {
+                iw = new BMap.InfoWindow(
+                    "<b>"+json.name+"</b><br>"+
+                    "<span><strong>价格：</strong>"+json.price+"</span><br>"+
+                    "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                    "<span><strong>介绍：</strong>"+json.discription+"</span><br>"+
+                    "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+                    "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+
+                    "<div align='right'>" +
+                    "<div class=\"btn-group btn-group-sm\" role=\"group\">" +
+                    "<button type=\"button\" class=\"btn btn-default\" disabled='disabled' onclick=\"SQLaddData1(" + json.productId + ")\"><span class=\"glyphicon glyphicon-star\"></span>购物车</button>" +
+                    "<button type=\"button\" class=\"btn btn-default\" disabled='disabled' onclick=\"SQLaddData2(" + json.productId + ")\"><span class=\"glyphicon glyphicon-shopping-cart\"></span>立即购买</button>" +
+                    "</div> </div>"
+                );
+            }
+            return iw;
+        }
+    }
+    function GetBuffer(){
+        IsBuffer=1;
+        radius=0.5;
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/Buffer?"+"buffer="+radius+"&pointlat="+currentpoint.lat+"&pointlng="+currentpoint.lng,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                bJson=[];
+                for(var i=0;i<data.length;i++){
+                    if(currentType=="All"){
+                        bJson.push({
+                            My_id:i,
+                            productId:data[i].productId,
+                            name:data[i].name,
+                            price:data[i].price,
+                            discription:data[i].discription,
+                            address:data[i].address,
+                            type:data[i].type,
+                            available:data[i].available,
+                            lng:data[i].lng,
+                            lat:data[i].lat,
+                            sellerId:data[i].sellerId,
+                            buyerId:data[i].buyerId,
+                            sellerPhone:"",
+                            sellerQQ:"",
+                            buyerPhone:"",
+                            buyerQQ:""
+                        });
+                        //createOption(bJson[i],bJson[i].type);
+                    }
+                    else if(currentType==data[i].type){
+                        bJson.push({
+                            My_id:i,
+                            productId:data[i].productId,
+                            name:data[i].name,
+                            price:data[i].price,
+                            discription:data[i].discription,
+                            address:data[i].address,
+                            type:data[i].type,
+                            available:data[i].available,
+                            lng:data[i].lng,
+                            lat:data[i].lat,
+                            sellerId:data[i].sellerId,
+                            buyerId:data[i].buyerId,
+                            sellerPhone:"",
+                            sellerQQ:"",
+                            buyerPhone:"",
+                            buyerQQ:""
+                        });
+                        //createOption(bJson[i],bJson[i].type);
+                    }
+
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        });
+        //补数据
+        for(var i=0;i<bJson.length;i++){
+            for(var j=0;j<Users.length;j++){
+                if(bJson[i].buyerId==Users[j].userId){
+                    bJson[i].buyerPhone=Users[j].phone;
+                    bJson[i].buyerQQ=Users[j].qq
+                }
+                if(bJson[i].sellerId==Users[j].userId){
+                    bJson[i].sellerPhone=Users[j].phone;
+                    bJson[i].sellerQQ=Users[j].qq
+                }
+            }
+        }
+        addMarkerAll(-1);
+        var circle = new BMap.Circle(currentpoint,radius*1000,{strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5}); //创建圆
+        map.addOverlay(circle);            //增加圆
+    }
+
+</script>
+
+<!--添加供需任务-->
+<script type="text/javascript">
+    function SubmitMyform() {
+        //var form = document.getElementById('myForm');
+        var form = new FormData(document.getElementById("myForm"));
+        //form.submit();
+        var TemMy_id=mJson.length;
+        var data = {
+            'name':form.get('name'),
+            'price':form.get('price'),
+            'discription':form.get('discription'),
+            'address':form.get('address'),
+            'type':form.get('type'),
+            'sellerId':userId
+        };
+
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "http://localhost:8082/supdem/product/add" ,//url
+            data: data,
+            async: false,
+            success: function (data) {
+                mJson.push({
+                    My_id:TemMy_id,
+                    productId:data.productId,
+                    name:data.name,
+                    price:data.price,
+                    discription:data.discription,
+                    address:data.address,
+                    type:data.type,
+                    available:data.available,
+                    lng:data.lng,
+                    lat:data.lat,
+                    sellerId:data.sellerId,//用户交的单子用户就是卖家
+                    buyerId:data.buyerId
+                });
+                createOption(mJson[TemMy_id],mJson[TemMy_id].type);
+                addMarker(TemMy_id);
+            },
+            error : function() {
+                alert("提交订单失败！");
+            }
+        });
+
+        /*setTimeout(function(){
+            GetLastData();
+        },1000);*/
+
+        var tbody = document.getElementById('tbMain4');
+        var trow = getDataRow3(mJson[TemMy_id]); //定义一个方法,返回tr数据
+        tbody.appendChild(trow);
+    }
+
+    /*添加新供需任务
+    function GetLastData() {
+        var TemMy_id=mJson.length;
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/latest",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                mJson.push({
+                    My_id:TemMy_id,
+                    productId:data.productId,
+                    name:data.name,
+                    price:data.price,
+                    discription:data.discription,
+                    address:data.address,
+                    type:data.type,
+                    available:data.available,
+                    lng:data.lng,
+                    lat:data.lat,
+                    sellerId:data.sellerId,//用户交的单子用户就是卖家
+                    buyerId:data.buyerId
+                });
+                createOption(mJson[TemMy_id],mJson[TemMy_id].type);
+                addMarker(TemMy_id);
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+    }
+*/
+
+    function SubmitMyAddress() {
+        //var form = document.getElementById('myForm');
+        var form = new FormData(document.getElementById("myFormAddress"));
+        //form.submit()
+        var data = {
+            'userId':userId,
+            'address':form.get('address'),
+
+        };
+
+        $.ajax({
+            //几个参数需要注意一下
+            type: "put",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "http://localhost:8082/supdem/user/update/"+userId ,//url
+            data: data,
+            async: false,
+            success: function (data) {
+                addressData=[];
+                if(data.address1!=null)
+                {
+                    addressData.push(data.address1);
+                }
+                if(data.address2!=null)
+                {
+                    addressData.push(data.address2);
+                }
+                if(data.address3!=null)
+                {
+                    addressData.push(data.address3);
+                }
+            },
+            error : function() {
+                alert("提交订单失败！");
+            }
+        });
+        var table=document.getElementById("tbMain5");//,trs=table.getElementsByTagName("tr");
+        for(var i=addressData.length-2;i>=0;i--){
+            table.deleteRow(i);
+        }
+
+        /*setTimeout(function(){
+            GetLastData();
+        },1000);*/
+        creatTBAddress();
+        loadcities();
+    }
+</script>
+
+<!--愿望清单列表-->
+<script type="text/javascript">
+
+    var cart = [];
+    Initial1();
+
+    //初始化函数
+    function Initial1() {
+        SQLgetData1();
+        creatTB1();
+    }
+
+    //创建表格
+    function creatTB1(){
+        var tbody = document.getElementById('tbMain1');
+        for(var i = 0;i < cart.length; i++){ //遍历一下json数据
+            var trow = getDataRow1(cart[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+    }
+    //生成表格，带操作函数，h为一个cart数据
+    function getDataRow1(h){
+
+        //前四列信息
+        var row = document.createElement('tr'); //创建行
+        var nameCell = document.createElement('td'); //创建第一列name
+        nameCell.innerHTML = h.name; //填充数据
+        row.appendChild(nameCell); //加入行 ，下面类似
+        var dateCell = document.createElement('td');//创建第二列date
+        dateCell.innerHTML = h.date;
+        row.appendChild(dateCell);
+        var priceCell = document.createElement('td');//创建第三列price
+        priceCell.innerHTML = h.price;
+        row.appendChild(priceCell);
+        var availableCell = document.createElement('td');//创建第四列available
+        availableCell.setAttribute("id","AC"+h.productId.toString());//每个available的id
+        if(h.available == "1"){row.setAttribute("id","A"+h.productId.toString());row.setAttribute("class","warning");availableCell.innerHTML = "销售中";}
+        if(h.available == "0"){row.setAttribute("id","A"+h.productId.toString());row.setAttribute("class","danger");availableCell.innerHTML = "已售罄";}
+        row.appendChild(availableCell);
+
+        //购买属性
+        var Cell = document.createElement('td');//创建第五列，操作列
+        row.appendChild(Cell);
+        var buybtn = document.createElement('input'); //创建一个input控件
+        buybtn.setAttribute('type','button'); //type="button"
+        buybtn.setAttribute('value','购买');
+        buybtn.setAttribute('class','btn btn-default btn-xs');
+        buybtn.setAttribute('id',"CartBtn"+h.productId.toString());//会修改按钮，设置id，删除按钮一直可以按，不用修改
+
+        //购买操作
+        buybtn.onclick=function(){
+            //找到按钮所在行的节点，然后删掉这一行，样式删除
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+
+            SQLdBuy(h.My_id);//购物车删除，添加到购物清单
+
+            //cart列表删除
+            cart.splice(h.My_id, 1);//列表删除
+        }
+        Cell.appendChild(buybtn); //把购买按钮加入td，别忘了
+
+        //删除属性
+        var delbtn = document.createElement('input'); //创建一个input控件
+        delbtn.setAttribute('type','button'); //type="button"
+        delbtn.setAttribute('value','删除');
+        delbtn.setAttribute('class','btn btn-primary btn-xs');
+        //删除操作
+        delbtn.onclick=function(){
+            //找到按钮所在行的节点，然后删掉这一行
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+            SQLdeleteData1(h.cartId);
+            cart.splice(h.My_id, 1);
+        }
+        Cell.appendChild(delbtn); //把删除按钮加入td，别忘了
+
+        if(h.available == "0"){ //商品已经售罄后，不能再点击购买
+            //delbtn.setAttribute('disabled','disabled');
+            buybtn.setAttribute('disabled','disabled');
+        }
+
+        return row; //返回tr数据
+    }
+    //获取所有购物车列表数据,cart数据
+    function SQLgetData1() {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/cart/all",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                var Temp;
+                for(var i=0;i<data.length;i++){
+                    cart.push({
+                        My_id:i,
+                        cartId:data[i].cartId,
+                        productId:data[i].productId,
+                        date:data[i].addDate,
+                        price:0,
+                        name:'',
+                        available:'',
+                    });
+                    SQLgetByID1(data[i].productId,i);
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+    }
+
+
+    //通过Id找商品名字，id为productId，i是该商品在cart中的位置
+    function SQLgetByID1(id,i){
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/ID/"+id,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                    cart[i].name=data.name;
+                    cart[i].available=data.available;
+                    cart[i].price=data.price;
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+    }
+
+    //删除数据库购物车中的物品，id为cartId
+    function SQLdeleteData1(id) {
+        $.ajax({
+            url:"http://localhost:8082/supdem/cart/delete/"+id,
+            data : {_method : "DELETE",cartId:id},
+            type : "POST",
+            async: false,
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("删除失败!");
+            }
+        });
+    }
+
+    //加入购物车，id为productId
+    function SQLaddData1(id) {
+        var temFlag=0;
+        for(var i=0;i<cart.length;i++) {
+            if(cart[i].productId==id){
+               temFlag=1;
+            }
+        }
+        if(temFlag!=1){
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth()+1;
+            var date = now.getDate();
+            var time = year+"-"+month+"-"+date;
+            $.ajax({
+                type:"post",
+                url:"http://localhost:8082/supdem/cart/add",
+                data:{productId:id,addDate:time},
+                dataType : "json",
+                async: false,
+                success:function (data) {
+                    cart.push({
+                        My_id:cart.length,
+                        cartId:data.cartId,
+                        productId:data.productId,
+                        date:data.addDate,
+                        name:'',
+                        available:''
+                    });
+                    //连接product表获取数据的名称和available值
+                    SQLgetByID1(id,cart.length-1);
+                    //更改表格
+                    var tbody = document.getElementById('tbMain1');
+                    var trow = getDataRow1(cart[cart.length-1]); //定义一个方法,返回tr数据
+                    tbody.appendChild(trow);
+                },
+                error : function(errorMsg) {
+                    //请求失败时执行该函数
+                    alert("添加失败!");
+                }
+            });
+        }
+        else {alert("购物车中已存在该商品");}
+
+    }
+
+    //从购物车购买，从愿望清单删除，添加到购物清单且交易中，id为cart列表的My_id
+    function SQLdBuy(id){
+        SQLdeleteData1(cart[id].cartId);//从数据库购物车删除
+        SQLaddData2(cart[id].productId);//添加到数据库购物清单列表
+    }
+
+    //从购物车购买，删除购物车中物品（数据库和表格和变量），将物品添加到购买清单交易中（购买清单的数据库和表格和变量）
+
+</script>
+
+<!--购物清单列表-->
+<script type="text/javascript">
+    var checklist = [];
+    Initial2();
+
+    //初始化函数
+    function Initial2() {
+        SQLgetData2();
+        creatTB2();
+    }
+
+    //创建表格
+    function creatTB2(){
+        var tbody = document.getElementById('tbMain2');
+        for(var i = 0;i < checklist.length; i++){ //遍历一下json数据
+            var trow = getDataRow2(checklist[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+    }
+
+    //生成表格，带操作函数，h为一个checklist数据
+    function getDataRow2(h){
+        var row = document.createElement('tr'); //创建行
+        var nameCell = document.createElement('td'); //创建第一列name
+        nameCell.innerHTML = h.name; //填充数据
+        row.appendChild(nameCell); //加入行 ，下面类似
+        var dateCell = document.createElement('td');//创建第二列date
+        dateCell.innerHTML = h.date;
+        row.appendChild(dateCell);
+        var priceCell = document.createElement('td');//创建第二列price
+        priceCell.innerHTML = h.price;
+        row.appendChild(priceCell);
+        var statusCell = document.createElement('td');//创建第三列status
+        statusCell.setAttribute("id","SC"+h.productId.toString());//每个Status的id
+        if(h.status == "1"){row.setAttribute("id","S"+h.productId.toString());row.setAttribute("class","warning");statusCell.innerHTML = "交易中";}
+        if(h.status == "2"){row.setAttribute("id","S"+h.productId.toString());row.setAttribute("class","success");statusCell.innerHTML = "已完成";}
+        if(h.status == "3"){row.setAttribute("id","S"+h.productId.toString());row.setAttribute("class","danger");statusCell.innerHTML = "已取消";}
+        row.appendChild(statusCell);
+
+        //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮
+        var Cell = document.createElement('td');//创建第四列，操作列
+        row.appendChild(Cell);
+
+        var buybtn = document.createElement('input'); //创建一个input控件
+        buybtn.setAttribute('type','button'); //type="button"
+        buybtn.setAttribute('value','完成');
+        buybtn.setAttribute('class','btn btn-default btn-xs');
+
+        buybtn.setAttribute('id',"CheBuyBtn"+h.productId.toString());//会修改按钮，设置id
+
+        //完成操作
+        buybtn.onclick=function(){
+            //找到按钮所在行的节点
+            //显示的列表不可选,且改变颜色,改变状态文字
+            delbtn.setAttribute('disabled','disabled');
+            buybtn.setAttribute('disabled','disabled');
+
+            //更新购物清单的状态和颜色，完成后，如果购物车中有该商品，属性更改为售罄且按钮的购买不可点击
+            var oneCL=document.getElementById("S"+h.productId.toString());//修改颜色，类
+            oneCL.setAttribute("class","success");
+            var oneCLS=document.getElementById("SC"+h.productId.toString());//修改status，商品状态
+            oneCLS.innerHTML = "已完成";
+
+            //更新愿望清单
+            var oneCart=document.getElementById("A"+h.productId.toString());//修改颜色，类
+            var oneCartA=document.getElementById("AC"+h.productId.toString());//修改available,商品是否可以购买
+            if(oneCart != null && oneCartA!=null){//
+                oneCart.setAttribute("class","danger");
+                oneCartA.innerHTML = "已售罄";
+                var oneCartBtn=document.getElementById("CartBtn"+h.productId.toString());//修改cart商品购买按钮不能点击了
+                oneCartBtn.setAttribute('disabled','disabled');
+            }
+
+            //更新发布清单
+            var oneRL= document.getElementById("A2"+h.productId.toString());
+            var oneRLA=document.getElementById("AC2"+h.productId.toString());
+            if(oneRL != null && oneRLA!=null){
+                oneRL.setAttribute("class","success");
+                oneRLA.innerHTML = "已完成";
+                var oneRLBtn=document.getElementById("CheDelBtn2"+h.productId.toString());//修改cart商品购买按钮不能点击了
+                oneRLBtn.setAttribute('disabled','disabled');
+            }
+
+
+
+
+            //checklist更新
+            checklist[h.My_id].status = "2";
+
+            //数据库的checklist更新,更新status=2，货物的available=0确认完成
+            SQLupdateData2(h.checklistId,"2");
+
+        };
+        Cell.appendChild(buybtn); //把删除按钮加入td，别忘了
+
+        var delbtn = document.createElement('input'); //创建一个input控件
+        delbtn.setAttribute('type','button'); //type="button"
+        delbtn.setAttribute('value','取消');
+        delbtn.setAttribute('class','btn btn-primary btn-xs');
+        delbtn.setAttribute('id',"CheDelBtn"+h.productId.toString());//会修改按钮，设置id
+        //取消操作
+        delbtn.onclick=function(){
+            //找到按钮所在行的节点
+            delbtn.setAttribute('disabled','disabled');
+            buybtn.setAttribute('disabled','disabled');
+
+            //更新购物清单的状态和颜色，取消对愿望清单没有影响
+            var oneCL=document.getElementById("S"+h.productId.toString());
+            oneCL.setAttribute("class","danger");
+            var oneCLS=document.getElementById("SC"+h.productId.toString());
+            oneCLS.innerHTML = "已取消";
+
+            //checklist更新
+            checklist[h.My_id].status = "3";
+
+            //数据库的checklist更新,更新status=3，货物的available=1不变
+            SQLupdateData2(h.checklistId,"3");
+        }
+        //已经完成或取消不可再点击按钮
+        if(h.status == "2"){
+            delbtn.setAttribute('disabled','disabled');
+            buybtn.setAttribute('disabled','disabled');
+        }
+        if(h.status == "3"){
+            delbtn.setAttribute('disabled','disabled');
+            buybtn.setAttribute('disabled','disabled');
+        }
+
+        Cell.appendChild(delbtn); //把删除按钮加入td，别忘了
+
+        return row; //返回tr数据
+    }
+
+    //获得所有购物清单列表数据
+    function SQLgetData2() {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/checklist/all",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                for(var i=0;i<data.length;i++){
+                    checklist.push({
+                        My_id:i,
+                        checklistId:data[i].checklistId,
+                        productId:data[i].productId,
+                        date:data[i].purchaseDate,
+                        status:data[i].status,
+                        name:'',
+                        price:0
+                    });
+                    SQLgetByID2(data[i].productId,i);
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+    }
+
+    //通过Id找商品名字，id为productId，i是该商品在checklist中的位置
+    function SQLgetByID2(id,i){
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/ID/"+id,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                checklist[i].name=data.name;
+                checklist[i].price=data.price;
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+    }
+
+    //加入购买清单，id为productId
+    function SQLaddData2(id) {
+        var temFlag=0;
+        var temCheckId;
+        for(var i=0;i<checklist.length;i++) {
+            if(checklist[i].productId==id ){//购物车中已经有这个商品，且status=1不可以买（status=2已经购买了，商品不可能还可以买）。
+                if(checklist[i].status=="1")temFlag=1;
+                else {temFlag=2;temCheckId=i;}//status=3，购物车中有但是取消了，可以再买，更改status和激活按钮，换颜色。
+            }
+        }
+        if(temFlag != 1){//为0或2
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth()+1;
+            var date = now.getDate();
+            var time = year+"-"+month+"-"+date;
+
+            if(temFlag == 2){//旧的取消订单的修改
+                //数据表更新
+                checklist[temCheckId].status="1";
+                checklist[temCheckId].purchaseDate=time;
+                //数据库更新
+                SQLupdateData2(checklist[temCheckId].checklistId,"1");
+                //页面样式更新
+                //找到按钮所在行的节点
+                //显示的列表不可选,且改变颜色,改变状态文字
+
+                //更新购物清单的状态和颜色，重新购买后，status=1，
+                var oneCL=document.getElementById("S"+checklist[temCheckId].productId.toString());//修改颜色，类
+                oneCL.setAttribute("class","warning");
+                var oneCLS=document.getElementById("SC"+checklist[temCheckId].productId.toString());//修改status，商品状态
+                oneCLS.innerHTML = "交易中";
+                var oneCheBuyBtn=document.getElementById("CheBuyBtn"+checklist[temCheckId].productId.toString());//修改checklist的按钮，可以点击
+                oneCheBuyBtn.disabled=false;
+                var oneCheDelBtn=document.getElementById("CheDelBtn"+checklist[temCheckId].productId.toString());//修改cart商品购买按钮，可以点击
+                oneCheDelBtn.disabled=false;
+            }
+            else{
+                $.ajax({
+                    type:"post",
+                    url:"http://localhost:8082/supdem/checklist/add",
+                    data:{productId:id,purchaseDate:time,status:"1"},//刚购买的商品，状态都是交易中
+                    dataType : "json",
+                    async: false,
+                    success:function (data) {
+                        checklist.push({
+                            My_id:checklist.length,
+                            checklistId:data.checklistId,
+                            productId:data.productId,
+                            date:data.purchaseDate,
+                            status:data.status,
+                            name:''
+                        });
+                        SQLgetByID2(id,checklist.length-1);
+
+                        var tbody = document.getElementById('tbMain2');
+                        var trow = getDataRow2(checklist[checklist.length-1]); //定义一个方法,返回tr数据
+                        tbody.appendChild(trow);
+                    },
+                    error : function(errorMsg) {
+                        //请求失败时执行该函数
+                        alert("添加失败!");
+                    }
+                });
+            }
+        }
+        else {alert("您已购买该商品");}
+    }
+
+    //取消或完成或者再购买，id为数据库的checklistId,取消status=3且不修改available=1，完成status=2且修改available=0，再次购买status=1且available=1
+    function SQLupdateData2(id,status) {
+        $.ajax({
+            url:"http://localhost:8082/supdem/checklist/update/"+id,
+            data : {_method : "PUT",checklistId:id,status:status},
+            type : "POST",
+            async: false,
+            success: function (data) {
+                if(status=="2"){//确认完成
+                    productAva(data.productId);
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("更新商品状态失败!");
+            }
+        });
+
+    }
+
+    //更新商品状态。checklist确认完成之后，status=2，货物列表的available=0，取消不修改为1，一旦完成概不退换，id为productId
+    function productAva(productId) {
+        $.ajax({
+            url:"http://localhost:8082/supdem/product/update/"+productId,
+            data : {
+                _method : "PUT",
+                productId:productId,
+                name:"",
+                price:"",
+                discription:"",
+                address:"",
+                type:"",
+                buyerId:userId,
+                available:"0"
+            },//确认完成
+            type : "POST",
+            async: false,
+            success:function (data) {
+                //mJson更新
+                for(var i=0;i<mJson.length;i++){
+                    if(mJson[i].productId==productId){
+                        mJson[i].available="0";
+                        mJson[i].buyerId=data.buyerId;
+                        addMarker(i);
+                    }
+                }
+
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("更新available失败!");
+            }
+        });
+    }
+
+
+</script>
+
+<!--找商家下单-->
+<script type="text/javascript">
+
+    var Seller = [];
+    var Order=[];
+    var picfile4;
+    picfile4="photos/seller.png";
+    //商家图标
+
+    //获取菜单数据
+    var Goods = [];
+    function FindGoodsbySeller(sellerId) {
+        Goods = [];
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/goods/SellerGoods/"+sellerId,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                var Temp;
+                for(var i=0;i<data.length;i++){
+                    Goods.push({
+                        My_id:Goods.length,
+                        sellerId:data[i].sellerId,
+                        goodsId:data[i].goodsId,
+                        goodsName:data[i].name,
+                        goodsPrice:data[i].price,
+                        status:data[i].status
+                    });
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求Goods数据失败!");
+            }
+        });
+
+        return Goods;
+    }
+
+   //获取数据
+    $.ajax({
+        type:"get",
+        url:"http://localhost:8082/supdem/seller/all",
+        data:{},
+        dataType : "json",
+        async: false,
+        success:function (data) {
+            for(var i=0;i<data.length;i++){
+                Seller.push({
+                    My_id:i,
+                    sellerId:data[i].sellerId,
+                    name:data[i].name,
+                    discription:data[i].discription,
+                    phone:data[i].phone,
+                    qq:data[i].qq,
+                    address:data[i].address,
+                    lng:data[i].lng,
+                    lat:data[i].lat,
+                    goodslist:[]
+                });
+                Seller[Seller.length-1].goodslist = FindGoodsbySeller(data[i].sellerId);
+            }
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("请求数据失败!");
+        }
+    });
+
+    addSellerMarker(0);
+
+    //创建商家marker
+    function addSellerMarker(index){
+        if(index==1){
+            map.clearOverlays();
+            var allOverlay = map.getOverlays();
+            for (var j = 0; j < allOverlay.length; j++) {
+                allOverlay[j].enableMassClear();
+            }
+            map.clearOverlays();
+        }
+
+        for(var i=0;i<Seller.length;i++){
+            var json = Seller[i];
+            var point = new BMap.Point(json.lng,json.lat);
+            var iconImg;
+            iconImg = new BMap.Icon(picfile4, new BMap.Size(50,50));
+
+            var marker = new BMap.Marker(point,{icon:iconImg});
+            marker.disableMassClear();
+            var iw = createSellerInfoWindow(i);
+            map.addOverlay(marker);
+
+            (function(){
+                var index = i;
+                var _iw = createSellerInfoWindow(index);
+                var _marker = marker;
+                _marker.addEventListener("click",function(){
+                    this.openInfoWindow(_iw);
+                    //TempIndex=index;
+
+
+                });
+            })
+            ()
+        }
+        AddCurrentPoint();
+    }
+
+    //创建订单marker
+    function addOrderMarker(i){
+        var json = Order[i];
+        var point = new BMap.Point(json.lng,json.lat);
+        var iconImg;
+        iconImg = new BMap.Icon(picfile1, new BMap.Size(50,50));
+
+        var marker = new BMap.Marker(point,{icon:iconImg});
+        marker.disableMassClear();
+        var iw = createOrderInfoWindow(i);
+        map.addOverlay(marker);
+        map.openInfoWindow(iw,point);
+        (function(){
+            var index = i;
+            var _iw = createOrderInfoWindow(index);
+            var _marker = marker;
+            _marker.addEventListener("click",function(){
+                this.openInfoWindow(_iw);
+                //TempIndex=index;
+            });
+        })
+        ()
+
+
+    }
+
+    //创建商家InfoWindow
+    function createSellerInfoWindow(i){
+        var json = Seller[i];
+        var iw;
+        iw = new BMap.InfoWindow(
+            "<b>"+json.name+"</b><br>"+
+            "<span><strong>商品介绍：</strong>"+json.discription+"</span><br>"+
+            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+            "<span><strong>电话：</strong>"+json.phone+"</span><br>"+
+            "<span><strong>QQ：</strong>"+json.qq+"</span><br><br>"+
+            "<div align='right'>"+
+           //在button中储存Seller的id号
+            //"<button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#exampleModal4\" data-whatever=\""+i+"\"><i class=\"glyphicon glyphicon-plus\"></i>下单</button>"+
+            "<button type=\"button\" class=\"btn btn-default\" onclick=\"doBuy("+i+")\"><i class=\"glyphicon glyphicon-plus\"></i>下单</button>"+
+            "</div>"
+        );
+        return iw;
+    }
+
+    //创建订单InfoWindow
+    function createOrderInfoWindow(i){
+        var json = Order[i];
+        var iw;
+        iw = new BMap.InfoWindow(
+            "<b>"+username+"</b><br>"+
+            "<span><strong>商家：</strong>"+json.sellerName+"</span><br>"+
+            "<span><strong>订单：</strong>"+json.product+"</span><br>"+
+            "<span><strong>备注：</strong>"+json.remarkers+"</span><br>"+
+            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+            "<span><strong>电话：</strong>"+json.sellerPhone+"</span><br>"+
+            "<span><strong>QQ：</strong>"+json.sellerQQ+"</span><br><br>"+
+            "<span><strong>价格：</strong>"+json.orderPrice+"元"+"</span><br><br>"
+            //"<div align='right'>"+
+            //在button中储存Seller的id号
+            //"<button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#exampleModal4\" data-whatever=\""+i+"\"><i class=\"glyphicon glyphicon-plus\"></i>下单</button>"+
+            //"<button type=\"button\" class=\"btn btn-default\" onclick=\"doBuy("+i+")\"><i class=\"glyphicon glyphicon-plus\"></i>下单</button>"+
+            //"</div>"
+        );
+        return iw;
+    }
+
+    function doBuy(i) {
+        $('#exampleModal4').modal({
+            keyboard: false,
+        });
+        TempIndex=i;
+    }
+
+    var TempIndex=0;
+
+    $('#exampleModal4').on('show.bs.modal', function (event) {
+        //var button = $(event.relatedTarget) // Button that triggered the modal
+        //var recipient = button.data('whatever'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        //TempIndex=recipient;
+        var modal = $(this);
+        modal.find('.modal-title').text(Seller[TempIndex].name);
+        document.getElementById("sel").options.length = 0;
+        createSOrderOption("#sel", Seller[TempIndex].goodslist);
+        // modal.find('.modal-body input').val(recipient)
+    });
+
+    function SubmitSeller() {
+        var form = new FormData(document.getElementById("myForm2"));
+        //form.append("sellerId",Seller[recipient].sellerId);
+        /*var product_list = "";
+        var product_or=form.getAll("product");
+        for(var i=0;i<product_or.length;i++){
+            product_list+=product_or[i]+",";
+        }
+        product_list=product_list.substring(0,product_list.length-1);*/
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = now.getMonth()+1;
+        var date = now.getDate();
+        var time = year+"-"+month+"-"+date;
+
+        var data = {
+            'sellerId': Seller[TempIndex].sellerId,
+            'product': product_list,
+            'address':form.get('address'),
+            'remarkers':form.get('remarkers'),
+            'buyerId':userId,
+            'orderDate':time,
+            'orderPrice':money};
+
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "http://localhost:8082/supdem/order/add" ,//url
+            data: data,
+            async: false,
+            success: function (data) {
+                Order.push({
+                    My_id:Order.length,
+                    orderId:data.orderId,
+                    sellerId:data.sellerId,
+                    buyerId:data.buyerId,
+                    product:data.product,
+                    address:data.address,
+                    remarkers:data.remarkers,
+                    lng:data.lng,
+                    lat:data.lat,
+                    orderDate:data.orderDate,
+                    sellerName:'',
+                    sellerQQ:'',
+                    sellerPhone:'',
+                    orderPrice:data.price
+                });
+                //补充seller的信息
+                getSellerById(data.sellerId,Order.length-1);
+
+                //添加订单的按钮
+                addOrderMarker(Order.length-1);
+
+                //更改表格
+                var tbody = document.getElementById('tbMain8');
+                var trow = getDataRowSeller(Order[Order.length-1]); //定义一个方法,返回tr数据
+                tbody.appendChild(trow);
+
+                //更新临时数据
+                product_list='';
+                money=0;
+            },
+            error : function() {
+                alert("提交商家订单失败！");
+            }
+        });
+    }
+
+    //通过Id找商品名字，id为SellerId，i是该商品在merchantOrder中的位置
+    function getSellerById(id,i) {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/seller/ID/"+id,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                Order[i].sellerName=data.name;
+                Order[i].sellerQQ=data.qq;
+                Order[i].sellerPhone=data.phone;
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求Seller数据失败!");
+            }
+        });
+
+    }
+
+    Initial8();
+    //初始化函数
+    function Initial8() {
+        SQLgetData8();
+        creatTB8();
+    }
+
+    //创建表格
+    function creatTB8(){
+        var tbody = document.getElementById('tbMain8');
+        var orderlength;
+        if(Order.length< 5 ){orderlength=Order.length;}
+        else{orderlength=5;}
+
+        for(var i = 0;i < Order.length; i++){ //遍历一下json数据
+            var trow = getDataRowSeller(Order[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+    }
+
+    //新加表格
+    //生成表格，h为一个order数据
+    function getDataRowSeller(h){
+        //前四列信息
+        var row = document.createElement('tr'); //创建行
+        var nameCell = document.createElement('td'); //创建第一列product
+        nameCell.innerHTML = h.product; //填充数据
+        row.appendChild(nameCell); //加入行 ，下面类似
+
+        var dateCell = document.createElement('td');//创建第二列date
+        dateCell.innerHTML = h.orderDate;
+        row.appendChild(dateCell);
+
+        var priceCell = document.createElement('td');//创建第三列price
+        priceCell.innerHTML = h.orderPrice+"元";
+        row.appendChild(priceCell);
+
+        var PhoneCell = document.createElement('td');//创建第四列联系方式
+        PhoneCell.innerHTML = h.sellerPhone;
+        row.appendChild(PhoneCell);
+
+        //没有操作设为默认的黄色
+        row.setAttribute("class","warning");
+
+        return row; //返回tr数据
+    }
+
+    //获取所有购物车列表数据,cart数据
+    function SQLgetData8() {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/order/all",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                var Temp;
+                for(var i=0;i<data.length;i++){
+
+                    if(data[i].buyerId==userId){//加载用户的订单
+                        Order.push({
+                            My_id:Order.length,
+                            orderId:data[i].orderId,
+                            sellerId:data[i].sellerId,
+                            buyerId:data[i].buyerId,
+                            product:data[i].product,
+                            address:data[i].address,
+                            remarkers:data[i].remarkers,
+                            lng:data[i].lng,
+                            lat:data[i].lat,
+                            orderDate:data[i].orderDate,
+                            sellerName:'',
+                            sellerQQ:'',
+                            sellerPhone:'',
+                            orderPrice:data[i].price
+                        });
+                        getSellerById(data[i].sellerId,Order.length-1);
+                    }
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求Cart数据失败!");
+            }
+        });
+    }
+
+</script>
+
+<!--不同类型数据的获取-->
+<script type="text/javascript">
+    var Type=[];
+    var IsType = 0;
+    var currentType = "All";
+
+    /*
+    function SQLgetByType(type){
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/type/"+type,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    Type.push({
+                        My_id: i,
+                        productId: data[i].productId,
+                        name: data[i].name,
+                        price: data[i].price,
+                        discription: data[i].discription,
+                        address: data[i].address,
+                        type: data[i].type,
+                        available: data[i].available,
+                        lng: data[i].lng,
+                        lat: data[i].lat,
+                        sellerId: data[i].sellerId,
+                        buyerId: data[i].buyerId
+                    });
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+    }
+*/
+
+    //创建marker，flag确定显示图标时不重复，type为类型，isAll一般为0只显示一类
+    function addMarkerType(flag,type,isAll){
+        IsBuffer=0;
+
+        if(isAll==0){
+            map.clearOverlays();
+            var allOverlay = map.getOverlays();
+            for (var j = 0; j < allOverlay.length; j++) {
+                allOverlay[j].enableMassClear();
+            }
+            map.clearOverlays();
+            Type=[];
+        }//不需要请求大类的所有数据
+
+        AddCurrentPoint();
+        currentType = type;
+        for(var i=0;i<mJson.length;i++){
+            if(i!=flag && mJson[i].type==type){
+
+
+                var json = mJson[i];
+                var point = new BMap.Point(json.lng,json.lat);
+                var iconImg;
+                if(mJson[i].available == "0")
+                {
+                    if(mJson[i].type=="delivery" || mJson[i].type=="buy" || mJson[i].type=="sign" || mJson[i].type=="class" || mJson[i].type=="service" )
+                    {iconImg = new BMap.Icon(picfile5, new BMap.Size(50,50));}
+                    else {iconImg = new BMap.Icon(picfile2, new BMap.Size(50,50));}
+                }
+                if(mJson[i].available == "1")
+                {
+                    if(mJson[i].type=="delivery" || mJson[i].type=="buy" || mJson[i].type=="sign" || mJson[i].type=="class" || mJson[i].type=="service" )
+                    {iconImg = new BMap.Icon(picfile6, new BMap.Size(50,50));}
+                    else {iconImg = new BMap.Icon(picfile3, new BMap.Size(50,50));}
+                    Type.push(mJson[i]);
+                    IsType = 1;
+                }
+
+                var marker = new BMap.Marker(point,{icon:iconImg});
+                marker.disableMassClear();
+                var iw = createInfoWindow(i);
+                map.addOverlay(marker);
+
+                (function(){
+                    var index = i;
+                    var _marker = marker;
+                    _marker.addEventListener("click",function(){
+                        var _iw = createInfoWindow(index);
+                        this.openInfoWindow(_iw);
+                    });
+                })
+                ()
+            }
+        }
+        //SQLgetByType(type);
+    }
+
+    function addMarkerTypeAll(index){
+        map.clearOverlays();
+        var allOverlay = map.getOverlays();
+        for (var j = 0; j < allOverlay.length; j++) {
+            allOverlay[j].enableMassClear();
+        }
+        map.clearOverlays();
+        Type=[];
+        AddCurrentPoint();
+        if(index == 1){
+            addMarkerType(-1,"book",1);
+            addMarkerType(-1,"beauty",1);
+            addMarkerType(-1,"cloth",1);
+            addMarkerType(-1,"life",1);
+            addMarkerType(-1,"other",1);
+        }
+        if(index == 2){
+            addMarkerType(-1,"delivery",1);
+            addMarkerType(-1,"buy",1);
+            addMarkerType(-1,"class",1);
+            addMarkerType(-1,"sign",1);
+            addMarkerType(-1,"service",1);
+        }
+        if(index == 3){
+            addMarkerType(-1,"book",1);
+            addMarkerType(-1,"beauty",1);
+            addMarkerType(-1,"cloth",1);
+            addMarkerType(-1,"life",1);
+            addMarkerType(-1,"other",1);
+            addMarkerType(-1,"delivery",1);
+            addMarkerType(-1,"buy",1);
+            addMarkerType(-1,"class",1);
+            addMarkerType(-1,"sign",1);
+            addMarkerType(-1,"service",1);
+        }
+    }
+
+
+
+</script>
+
+<!--提交的单子-->
+<script type="text/javascript">
+    var releaselist = [];
+    Initial3();
+
+    //初始化函数
+    function Initial3() {
+        SQLgetData3();
+        creatTB3();
+        SQLgetaddressData();
+        creatTBAddress();
+        loadcities();
+    }
+
+    var table=document.getElementById("tbMain5");
+    var rows=table.rows;
+    console.log(rows.length);
+    for(var i=0;i<rows.length;i++){
+        for(var j=0;j<rows[i].cells.length;j++){
+            console.log(rows[i].cells[j].innerHTML);
+        }
+    }
+    function SQLgetaddressData(){
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/user/ID/"+userId,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                addressData=[];
+                if(data.address1!=null){
+                    addressData.push(data.address1);
+                }
+                if(data.address2!=null){
+                    addressData.push(data.address2);
+                }
+                if(data.address3!=null){
+                    addressData.push(data.address3);
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求数据失败!");
+            }
+        });
+
+    }
+
+    function creatTBAddress(){
+        var tbody = document.getElementById('tbMain5');
+        for(var i = 0;i < addressData.length; i++){ //遍历一下json数据
+            var trow = getDataRowAddress(addressData[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+
+
+    }
+
+    function getDataRowAddress(h){
+        var row = document.createElement('tr'); //创建行
+        var addressCell = document.createElement('td'); //创建第一列name
+        addressCell.innerHTML = h; //填充数据
+        row.appendChild(addressCell); //加入行 ，下面类似
+        //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮
+        var Cell = document.createElement('td');//创建第四列，操作列
+        row.appendChild(Cell);
+
+        //删除操作
+        var delbtn = document.createElement('input'); //创建一个input控件
+        delbtn.setAttribute('type','button'); //type="button"
+        delbtn.setAttribute('value','删除');
+        delbtn.setAttribute('class','btn btn-primary btn-xs');
+        //取消操作
+        delbtn.onclick=function(){
+            //找到按钮所在行的节点
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+            //数据库中删除商品
+            SQLdeleteDataAddress(h);
+            loadcities();
+        };
+        Cell.appendChild(delbtn); //把删除按钮加入td，别忘了
+        return row; //返回tr数据
+    }
+    function SQLdeleteDataAddress(address) {
+        var data = {
+            'userId':userId,
+            'address':address,
+
+        };
+
+        $.ajax({
+            //几个参数需要注意一下
+            type: "put",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "http://localhost:8082/supdem/user/delete/"+userId ,//url
+            data: data,
+            async: false,
+            success: function (data) {
+                addressData=[];
+                if(data.address1!=null)
+                {
+                    addressData.push(data.address1);
+                }
+                if(data.address2!=null)
+                {
+                    addressData.push(data.address2);
+                }
+                if(data.address3!=null)
+                {
+                    addressData.push(data.address3);
+                }
+            },
+            error : function() {
+                alert("提交订单失败！");
+            }
+        });
+
+    }
+
+
+    //创建表格
+    function creatTB3(){
+        var tbody = document.getElementById('tbMain4');
+        for(var i = 0;i < releaselist.length; i++){ //遍历一下json数据
+            var trow = getDataRow3(releaselist[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+    }
+
+    //生成表格，带操作函数，h为一个releaselist数据
+    function getDataRow3(h){
+        var row = document.createElement('tr'); //创建行
+        var nameCell = document.createElement('td'); //创建第一列name
+        nameCell.innerHTML = h.name; //填充数据
+        row.appendChild(nameCell); //加入行 ，下面类似
+        var priceCell = document.createElement('td');//创建第二列price
+        priceCell.innerHTML = h.price;
+        row.appendChild(priceCell);
+        var addressCell = document.createElement('td');//创建第二列price
+        addressCell.innerHTML = h.address;
+        row.appendChild(addressCell);
+        var statusCell = document.createElement('td');//创建第三列available
+        statusCell.setAttribute("id","AC2"+h.productId.toString());//每个available的id
+        if(h.available == "1"){row.setAttribute("id","A2"+h.productId.toString());row.setAttribute("class","warning");statusCell.innerHTML = "未完成";}
+        if(h.available == "0"){row.setAttribute("id","A2"+h.productId.toString());row.setAttribute("class","success");statusCell.innerHTML = "已完成";}
+        row.appendChild(statusCell);
+
+        //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮
+        var Cell = document.createElement('td');//创建第四列，操作列
+        row.appendChild(Cell);
+
+        /*
+        var buybtn = document.createElement('input'); //创建一个input控件
+        buybtn.setAttribute('type','button'); //type="button"
+        buybtn.setAttribute('value','完成');
+        buybtn.setAttribute('class','btn btn-default btn-xs');
+
+        buybtn.setAttribute('id',"CheBuyBtn2"+h.productId.toString());//会修改按钮，设置id
+
+        //完成操作
+        buybtn.onclick=function(){
+            //找到按钮所在行的节点
+            //显示的列表不可选,且改变颜色,改变状态文字
+            delbtn.setAttribute('disabled','disabled');
+            buybtn.setAttribute('disabled','disabled');
+
+            //更新购物清单的状态和颜色，取消对愿望清单没有影响
+            var oneCL=document.getElementById("A2"+h.productId.toString());
+            oneCL.setAttribute("class","success");
+            var oneCLS=document.getElementById("AC2"+h.productId.toString());
+            oneCLS.innerHTML = "已完成";
+
+            //数据库的更新,更新status=2，货物的available=0确认完成
+            productAva(h.productId);
+
+            //数据更新
+            h.available="0";
+
+        };
+        Cell.appendChild(buybtn); //把删除按钮加入td，别忘了
+        */
+
+        //删除操作
+        var delbtn = document.createElement('input'); //创建一个input控件
+        delbtn.setAttribute('type','button'); //type="button"
+        delbtn.setAttribute('value','删除');
+        delbtn.setAttribute('class','btn btn-primary btn-xs');
+        delbtn.setAttribute('id',"CheDelBtn2"+h.productId.toString());//会修改按钮，设置id
+        //取消操作
+        delbtn.onclick=function(){
+            //找到按钮所在行的节点
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+            //数据库中删除商品
+            SQLdeleteData2(h.productId);
+            //删除图标
+            addMarker(h.My_id);
+            //卖家不卖了删除商品
+            mJson.splice(h.My_id,1);
+            SQLgetData3();
+            //列表删除
+            var oneul=document.getElementById(h.type);
+            var oneli=document.getElementById(h.type+h.productId.toString());
+            if(oneul != null && oneli != null){
+                oneul.removeChild(oneli);
+            }
+
+            //删除愿望清单和购物清单中的对应商品。
+            //更新愿望清单
+            var oneCart=document.getElementById("tbMain1");//修改颜色，类
+            var oneCartA=document.getElementById("A"+h.productId.toString());//修改available,商品是否可以购买
+            if(oneCart != null && oneCartA!=null){
+               oneCart.removeChild(oneCartA);
+            }
+
+            //更新购物清单
+            var oneCL= document.getElementById("tbMain2");
+            var oneCLA=document.getElementById("S"+h.productId.toString());
+            if(oneCL != null && oneCLA!=null){
+               oneCL.removeChild(oneCLA);
+            }
+
+        };
+        Cell.appendChild(delbtn); //把删除按钮加入td，别忘了
+
+        //已经完成或取消不可再点击按钮
+        if(h.available == "0"){
+            delbtn.setAttribute('disabled','disabled');
+            //buybtn.setAttribute('disabled','disabled');
+        }
+
+        return row; //返回tr数据
+    }
+
+    //获得所有发布的订单的数据
+    function SQLgetData3() {
+        releaselist=[];
+        for (var i = 0; i < mJson.length; i++) {
+            if(mJson[i].sellerId==userId){
+                releaselist.push(mJson[i]);
+            }
+        }
+    }
+
+    //删除数据库购物车中的物品，id为cartId
+    function SQLdeleteData2(id) {
+        $.ajax({
+            url:"http://localhost:8082/supdem/product/delete/"+id,
+            data : {_method : "DELETE",cartId:id},
+            type : "POST",
+            async: false,
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("删除失败!");
+            }
+        });
+    }
+
+</script>
+
+<!--新*********************************************************************************-->
+<!--改菜单-->
+<script type="text/javascript">
+
+    function Time(id) {
+        $('#datetimepicker'+id.toString()).datetimepicker({
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+    }
+
+    var TBid=0;
+
+    //删除表格一行
+    function deleteTB(){
+        $('#tbMain9 tr:last').remove();
+        if(TBid>0){
+            TBid=TBid-1;
+        }
+    }
+
+    //输入表格一行data为seller的goods
+
+    function addTB() {
+        var tbody = document.getElementById('tbMain9');
+        var trow = addTBbyId(TBid);
+        tbody.appendChild(trow);
+        TBid=TBid+1;
+    }
+
+    var money=0;
+    var product_list='';
+    //生成表格，带计算价格
+    function addTBbyId(TBid){
+        var goodsId=document.getElementById('sel');
+        var goods=goodsId.options[goodsId.selectedIndex].text;
+        var numberId = document.getElementById('number');
+        var number=numberId.value;
+        if(goods=="请选择商品" || goods == null || goods == ''){alert('请选择商品'); return;}
+
+        for(var i=0;i<number;i++){
+            product_list += goods +',';
+        }
+        product_list = product_list.substring(0,product_list.length-1);//去除末尾的逗号
+        money += goodsId.options[goodsId.selectedIndex].value * number;
+
+        var row = document.createElement('tr'); //创建行
+
+        var idCell = document.createElement('td'); //创建第一列
+        idCell.innerHTML=TBid + 1;//从0开始
+        row.appendChild(idCell); //加入行 ，下面类似
+
+
+        var goodsCell = document.createElement('td'); //创建第二列选择菜品的下拉框
+        goodsCell.innerHTML =goods;
+        row.appendChild(goodsCell); //加入行 ，下面类似
+
+        var numberCell = document.createElement('td'); //创建第二列选择菜品的下拉框
+        numberCell.innerHTML =number;
+        row.appendChild(numberCell); //加入行 ，下面类似
+
+        //算钱
+        var moneyId=document.getElementById('money');
+        moneyId.innerHTML="总价："+ money.toString() + "元";
+
+        return row; //返回tr数据
+    }
+
+    //创建option
+    function createSOrderOption(parentId, data) {
+        var Select='';
+        Select="<option value=''>请选择商品</option>";
+        $(parentId).append(Select);
+        for (var i = 0; i < data.length; i++) {
+            Select="<option value='"+data[i].goodsPrice+"'>"+data[i].goodsName+"("+data[i].goodsPrice+"元)"+"</option>";
+            $(parentId).append(Select);
+        }
+        $(parentId).selectpicker('refresh');
+        $(parentId).selectpicker('render');
+    }
+
+</script>
+
+<!--热力图  新增的-->
+<script>
+    //判断浏览区是否支持canvas
+    function isSupportCanvas(){
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
+
+    function setGradient(){
+        /*格式如下所示:
+        {
+            0:'rgb(102, 255, 0)',
+            .5:'rgb(255, 170, 0)',
+            1:'rgb(255, 0, 0)'
+        }*/
+        var gradient = {
+            0:'rgb(102, 255, 0)',
+            .5:'rgb(255, 170, 0)',
+            1:'rgb(255, 0, 0)'};
+        var colors = document.querySelectorAll("input[type='color']");
+        colors = [].slice.call(colors,0);
+        colors.forEach(function(ele){
+            gradient[ele.getAttribute("data-key")] = ele.value;
+        });
+        heatmapOverlay.setOptions({"gradient":gradient});
+    }
+
+    function openHeatmap(){
+        if(!isSupportCanvas()){
+            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+        }
+        heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":35});
+        map.addOverlay(heatmapOverlay);
+        var points=[];
+        var myJson = mJson;
+        if(IsType == 1){
+            myJson = Type;
+            //alert("Yes")
+        }
+
+        if (IsBuffer==1){
+            myJson = bJson;
+        }
+        for(var i=0;i<myJson.length;i++){
+            var mylat = myJson[i].lat;
+            var mylng = myJson[i].lng;
+            var mycount=0;
+            if(myJson[i].available=="1"){
+                mycount=1;
+            }
+            points.push({lng:mylng,lat:mylat,count:1+mycount});
+        }
+        heatmapOverlay.setDataSet({data:points,max:3});
+        setGradient();
+        heatmapOverlay.show();
+    }
+
+    function closeHeatmap(){
+        heatmapOverlay.hide();
+    }
+</script>
+
+<!--界面改变-->
+<script>
+    function ReturnOri() {
+        map.clearOverlays();
+        map.centerAndZoom(currentpoint,16);
+        var change_cancel = document.getElementById("Routeshift");
+        change_cancel.style.display = "none";
+        endpoint = new BMap.Point(114.36535,30.534151);
+        changeID=0;
+        bJson=[];
+        IsBuffer=0;
+        ProductPosition=[];
+        //getPerData();
+        addMarkerAll(-1);
+    }
+
+    var IsABLE = 0;
+    OldJson = mJson;
+    for(var i=0;i<mJson.length;i++){
+        if(mJson[i].available==1&&mJson[i].userId!=userId){
+            ableJson.push(mJson[i]);
+        }
+    }
+    function ShowAble() {
+        map.clearOverlays();
+        map.centerAndZoom(currentpoint,16);
+        if(IsABLE==0){
+            mJson = ableJson;
+            IsABLE=1;
+        }
+        else{
+            mJson = OldJson;
+            IsABLE=0;
+        }
+        /*for(var i=0;i<mJson.length;i++){
+            createOption(mJson[i],mJson[i].type);
+        }*/
+        addMarkerTypeAll(3);
+    }
+</script>
+
+</body>
+</html>
+

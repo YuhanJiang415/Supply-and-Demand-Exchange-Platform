@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+     <!--  <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>-->
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+   
+    xAxis: [{
+        type: 'category',
+        data: ['1','2','3','4','5','6','7'],
+        gridIndex:0
+    },
+   {
+        type: 'category',
+        data: ['1','2','3','4','5','6','7'],
+        gridIndex:1
+    },
+      {
+        type: 'category',
+        data: ['1','2','3','4','5','6','7'],
+        gridIndex:2
+    },
+     {
+        type: 'category',
+        data: ['5','6'],
+        gridIndex:3
+    },
+     {
+        type: 'category',
+        data: ['1','2','3','4','5','6','7'],
+        gridIndex:4
+    },
+    ],
+    yAxis: [{
+        type: 'value',
+        gridIndex:0
+    },
+    {
+        type: 'value',
+        gridIndex:1
+    },
+     {
+        type: 'value',
+        gridIndex:2
+    },
+    {
+        type: 'value',
+        gridIndex:3
+    },
+    {
+        type: 'value',
+        gridIndex:4
+    },
+    ],
+    grid: [
+        {   right:'68%',
+            bottom: '55%'},
+        {   left:'38%',
+            right:'38%',
+            bottom: '55%'},
+             {   left:'68%',
+            bottom: '55%'},
+             {   left:'20%',
+             right:'50%',
+            top: '55%'},
+             {   left:'55%',
+             right:'15%',
+            top: '55%'},
+             
+    ],
+    title:[
+    {
+        show:true,
+        text:"各群每周聊天分布",
+        x:'center'
+    },
+    {
+        text:'2019跳蚤市场',
+        left:'16%',
+        top:'5%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    {
+        text:'文理学部跳蚤市场',
+        left:'45%',
+        top:'5%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    {
+        text:'武汉大学跳蚤市场',
+        left:'75%',
+        top:'5%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+      {
+        text:'武汉大学供需平台',
+        left:'30%',
+        top:'50%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    {
+        text:'信息学部闲置群',
+        left:'65%',
+        top:'50%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    ],
+    tooltip:{
+        trigger:'axis',
+        axisPointer:{
+            type:'shadow'
+        }
+    },
+    series: [{
+        data: [134,168,230,166,253,288,223],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar'
+    },
+    {
+        data: [120,160,168,145,232,166,137],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:1,yAxisIndex:1
+    },
+     {
+        data: [205,157,127,158,133,231,199],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:2,yAxisIndex:2
+    },
+    {
+        data: [43,95],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:3,yAxisIndex:3
+    },
+     {
+        data: [7,32,21,20,21,33,33],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:4,yAxisIndex:4
+    },
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

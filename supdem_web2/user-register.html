@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>register</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style type="text/css">
+        body {background-color: #337ab7}
+    </style>
+    <script src="js/jquery-3.4.1.js"></script>
+    <script>
+        function checkbox1(){
+            var check=document.getElementsByName("checkbox");
+            check[0].checked=true;
+            check[1].checked=false;
+        }
+        function checkbox2(){
+            window.location.href = 'seller-register.html';
+        }
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                var username=document.getElementsByName("inputUser")[0].value;
+                var password=document.getElementsByName("inputPassword")[0].value;
+                var name=document.getElementsByName("inputName")[0].value;
+                var phone=document.getElementsByName("inputPhone")[0].value;
+                var qq=document.getElementsByName("inputQQ")[0].value;
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8082/supdem/user/user",
+                    data: {username, password,name,phone,qq},
+                    dataType: "text",
+                    async: false,
+                    success: function () {
+                        $("#exampleModal").show();
+                    },
+                    error: function (errorMsg) {
+                        alert("error");
+                    }
+                });
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="panel panel-primary" style="border:solid #fff;margin-top:2%;position:relative;width:40%;left:30%;">
+        <div class="panel-heading" style="font-size:20px">注册</div>
+        <div class="panel-body">
+            <form>
+                <label>身份:</label>
+                <br>
+                <label>
+                    <input name="checkbox" onclick="checkbox1();" checked="checked" type="checkbox" value="user"> 个体
+                </label>
+                <label>
+                    <input name="checkbox" onclick="checkbox2();" type="checkbox" value="seller" style="margin-left:15px;"> 商户
+                </label>
+                <br>
+                <br>
+                <label for="User">用户名:</label>
+                <input type="text" id="User" name="inputUser" class="form-control" placeholder="User name" required autofocus>
+                <br>
+                <label for="Password">密码:</label>
+                <input type="password" id="Password" name="inputPassword" class="form-control" placeholder="Password" required>
+                <br>
+                <label for="Name">昵称:</label>
+                <input type="text" id="Name" name="inputName" class="form-control" placeholder="Name" required>
+                <br>
+                <label for="Phone">电话:</label>
+                <input type="tel" id="Phone" name="inputPhone" class="form-control" placeholder="Phone" required>
+                <br>
+                <label for="QQ">QQ:</label>
+                <input type="text" id="QQ" name="inputQQ" class="form-control" placeholder="QQ" required>
+                <br>
+                <label id="register" for="submit" class="sr-only">OK</label>
+                <input type="button" id="submit" class="btn btn-primary btn-sm" style="width:60px;margin-right:15px;" value="OK">
+                <label for="Cancel" class="sr-only">Cancel</label>
+                <input onclick="window.location.href = 'mylogin.html';" type="button" id="Cancel" name="cancel" class="btn btn-default btn-sm" style="width:60px" value="Cancel">
+            </form>
+        </div>
+    </div>
+</div>
+<div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:50%;margin-top:20%;left:25%;right:25%;">
+            <div class="modal-header">
+                <h4 class="modal-title">注意</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href = 'login.html';">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You can sign in right now.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.location.href = 'login.html';">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>武汉大学供需平台登录界面</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <style>
+    body{
+      background-color:#337ab7;
+    }
+  </style>
+</head>
+<!--class="bg-gradient-primary"-->
+<body>
+
+  <div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5" style="top: 5%">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div id=obj class="col-lg-6 d-none d-lg-block" style="background:url(photos/bg1.png);background-position:center;background-size:cover"></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">武汉大学供需平台</h1>
+                    <h1 class="h4 text-gray-900 mb-4">欢迎您的使用</h1>
+                  </div>
+                  <form class="user">
+                    <div class="form-group">
+                      <input type="email" class="form-control form-control-user" name="inputUser" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="输入用户名">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control form-control-user" name="inputPassword" id="exampleInputPassword" placeholder="输入密码">
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox small">
+                        <label>
+                          <input name="checkbox" onclick="checkbox1();" checked="checked" type="checkbox" value="user"> 个体
+                        </label>
+                        <label>
+                          <input name="checkbox" onclick="checkbox2();" type="checkbox" value="seller" style="margin-left: 10px"> 商户
+                        </label>
+                      </div>
+                    </div>
+                    <!--<a href="index.html" class="btn btn-primary btn-user btn-block">
+                      Login
+                    </a>-->
+                    <input id="submit" class="btn btn-lg btn-primary btn-block" type="button" value="登录"  style="background-color: #337ab7">
+                    <hr>
+                  
+                  </form>
+                  <hr>
+    
+                  <div class="text-center">
+                    <a class="small" href="user-register.html">注册一个新账号!</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="row">
+      <p class="text-center" style="width:100%;color: white">
+        © Copyrights <strong>WHU RS WebService Group</strong>. All Rights Reserved
+      </p>
+    </div>
+  </div>
+
+  <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width:50%;margin-top:20%;left:25%;right:25%;">
+        <div class="modal-header">
+          <h4 class="modal-title">注意</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hide();">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>用户名或密码不正确</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="hide();">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+
+<script>
+  var curIndex=0;
+  //时间间隔(单位毫秒)，每秒钟显示一张，数组共有5张图片放在Photos文件夹下。
+  var timeInterval=3000;
+  var arr=new Array();
+  arr[0]="photos/bg1.png";
+  arr[1]="photos/bg2.jpg";
+  arr[2]="photos/bg3.jpg";
+  arr[3]="photos/bg4.jpg";
+  arr[4]="photos/bg5.jpeg";
+
+  setInterval(changeImg,timeInterval);
+  function changeImg()
+  {
+    var obj=document.getElementById("obj");
+    if (curIndex==arr.length-1)
+    {curIndex=0;}
+    else
+    {curIndex+=1;}
+    obj.style.backgroundImage="url("+arr[curIndex]+")";
+  }
+
+  function checkbox1(){
+    var check=document.getElementsByName("checkbox");
+    check[0].checked=true;
+    check[1].checked=false;
+  }
+  function checkbox2(){
+    var check=document.getElementsByName("checkbox");
+    check[0].checked=false;
+    check[1].checked=true;
+  }
+  function hide(){
+    $("#exampleModal").hide();
+  }
+  $(document).ready(function () {
+    $("#submit").click(function () {
+      var user = document.getElementsByName("inputUser")[0].value;
+      var password = document.getElementsByName("inputPassword")[0].value;
+      var check=document.getElementsByName("checkbox");
+      if(check[0].checked==true) {
+        $.ajax({
+          type: "get",
+          url: "http://localhost:8082/supdem/user/button1",
+          data: {user, password},
+          dataType: "json",
+          async: false,
+          success: function (data) {
+            status = data;
+            if (!status) {
+              $("#exampleModal").show();
+              // alert("用户名或密码不正确");
+            } else {
+              userid = data[0].userId;
+              window.location.href = 'indexuser.html?userid='+userid+"&username="+user;
+            }
+          },
+          error: function (errorMsg) {
+            alert("error");
+          }
+        });
+      }
+      else{
+        $.ajax({
+          type: "get",
+          url: "http://localhost:8082/supdem/seller/button2",
+          data: {user, password},
+          dataType: "json",
+          async: false,
+          success: function (data) {
+            status = data;
+            if (!status) {
+              $("#exampleModal").show();
+            } else {
+              sellerid = data[0].sellerId;
+              window.location.href = 'seller.html?sellerid='+sellerid+"&sellername="+user;
+            }
+          },
+          error: function (errorMsg) {
+            alert("error");
+          }
+        });
+      }
+    })
+  });
+</script>
+
+</body>
+
+</html>

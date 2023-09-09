@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+      <!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>-->
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            crossStyle: {
+                color: '#999'
+            }
+        }
+    },
+    toolbox: {
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    legend: {
+        data: ['群人数', '聊天记录总数']
+    },
+    xAxis: [
+        {
+            type: 'category',
+            data: ['2019跳蚤市场线上交易平台', 'WHU文理学部跳蚤市场新1群', '武汉大学跳蚤市场', '信部闲置群', '武大供需撮合平台2群'],
+            axisPointer: {
+                type: 'shadow'
+            },
+            axisLabel:
+            {
+                interval:0,
+                rotate:30,
+                textStyle:{
+                    fontSize:6
+                }
+            }
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            name: '群人数',
+            //min: 0,
+          //  max: 250,
+          //  interval: 50,
+          //  axisLabel: {
+             //   formatter: '{value} ml'
+           // }
+        },
+        {
+            type: 'value',
+            name: '聊天记录总数',
+            //min: 0,
+          //  max: 25,
+           // interval: 5,
+          //  axisLabel: {
+           //     formatter: '{value} °C'
+          //  }
+        }
+    ],
+    series: [
+        {
+            name: '群人数',
+            type: 'bar',
+            data: [1973,
+1605,
+1598,
+496,
+4535,
+]
+        },
+        {
+            name: '聊天记录总数',
+            type: 'line',
+            yAxisIndex: 1,
+            data: [1462,1128,1210,167,138,]
+        }
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+      <!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>-->
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+   
+    xAxis: [
+	{
+        type: 'category',
+        data: ['出全新奥伦纳素蛋白水菲洛嘉晚霜中样',
+'优惠电影票 吃喝玩乐推广兼职戳我',
+'代刷学习通慕课视听说等各种网课',
+'昨天已去  明日依旧',
+'出小棕瓶菌菇水倩碧黄油',
+'代写论文，出旅游票，出答题纸',
+'叶修修的小可爱',
+'88vip京东plus代下',
+'Re-L',
+'出白衬衫育发液国考书',
+],
+ axisLabel:{  
+   interval:0, 
+   rotate:30,
+textStyle:{
+          fontSize:6    //更改坐标轴文字大小
+        }
+} ,
+        gridIndex:0
+    },
+   {
+        type: 'category',
+        data: ['枫14 脾气差且忙','【传说】枫14 脾气差且忙','毕业出书了','a.出租校园卡、电动车','最近买了零食但是不想出嘻嘻',
+'【话唠】毕业出书了',
+'18＃小可爱',
+'A大二西方文化教程大一综合教程翻译答案',
+'【话唠】坐标枫14',
+'粪斗大叔',
+],
+axisLabel:{  
+   interval:0, 
+   rotate:30,
+textStyle:{
+          fontSize:6    //更改坐标轴文字大小
+        }
+} ,
+        gridIndex:1
+    },
+      {
+        type: 'category',
+        data: ['',
+'茕茕',
+'怀旧。',
+'大一-社科-刘宇森',
+'【太尉】夏尔斯',
+'Johanna',
+'Time After Time',
+'【御史】怀旧。',
+'Black_on_Red',
+'TIGERRRRr',
+],
+axisLabel:{  
+   interval:0, 
+   rotate:30,
+textStyle:{
+          fontSize:6    //更改坐标轴文字大小
+        }
+} ,
+        gridIndex:2
+    },
+     {
+        type: 'category',
+        data: ['阅文','专业论文格式修改，论文降重','总群群主','桂园','你的丈母娘粗腿怪','Tiffany.','出悦诗风吟气垫替换装',
+'。',
+'<U+0001F338>绎心～',
+'kalpana',
+],
+axisLabel:{  
+   interval:0, 
+   rotate:30,
+textStyle:{
+          fontSize:6    //更改坐标轴文字大小
+        }
+} ,
+        gridIndex:3
+    },
+     {
+        type: 'category',
+        data: ['','片仔癀护肤品代理','prince','出大衣','2309652272','出金吉鸟两年八个月2000','出雅思','<U+0001F352>信5',
+		'啊呀哟','386546240',],
+		axisLabel:{  
+   interval:0, 
+   rotate:30,
+textStyle:{
+          fontSize:6    //更改坐标轴文字大小
+        }
+} ,
+        gridIndex:4
+    },
+    ],
+    yAxis: [{
+        type: 'value',
+        gridIndex:0
+    },
+    {
+        type: 'value',
+        gridIndex:1
+    },
+     {
+        type: 'value',
+        gridIndex:2
+    },
+    {
+        type: 'value',
+        gridIndex:3
+    },
+    {
+        type: 'value',
+        gridIndex:4
+    },
+    ],
+    grid: [
+        {   right:'68%',
+            bottom: '55%'},
+        {   left:'38%',
+            right:'38%',
+            bottom: '55%'},
+             {   left:'68%',
+            bottom: '55%'},
+             {   left:'20%',
+             right:'50%',
+            top: '55%'},
+             {   left:'55%',
+             right:'15%',
+            top: '55%'},
+             
+    ],
+    title:[
+    {
+        show:true,
+        text:"各个群前十聊天数",
+        x:'center'
+    },
+    {
+        text:'2019跳蚤市场',
+        left:'16%',
+        top:'5%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    {
+        text:'文理学部跳蚤市场',
+        left:'45%',
+        top:'5%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    {
+        text:'武汉大学跳蚤市场',
+        left:'75%',
+        top:'5%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+      {
+        text:'武汉大学供需平台',
+        left:'30%',
+        top:'50%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    {
+        text:'信息学部闲置群',
+        left:'65%',
+        top:'50%',
+        textStyle:{
+            fontSize:10
+        }
+    },
+    ],
+    tooltip:{
+        trigger:'axis',
+        axisPointer:{
+            type:'shadow'
+        }
+    },
+    series: [{
+        data: [83,43,35,35,26,25,25,24,22,22,],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar'
+    },
+    {
+        data: [68,29,26,21,20,15,15,15,14,14,],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:1,yAxisIndex:1
+    },
+     {
+        data: [94,41,31,25,20,19,16,12,12,12,],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:2,yAxisIndex:2
+    },
+    {
+        data: [10,8,8,6,6,5,5,3,3,3,],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:3,yAxisIndex:3
+    },
+     {
+        data: [32,14,9,8,7,5,5,4,4,3,],
+        name:"聊天总次数",
+        barWidth:'60%',
+        itemStyle:{
+            normal:{
+                color:'#F4A7B9'
+            }
+        },
+        type: 'bar',
+        xAxisIndex:4,yAxisIndex:4
+    },
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

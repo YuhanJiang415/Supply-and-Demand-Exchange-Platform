@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+        #l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+        #r-result{height:100%;width:20%;float:left;}
+        #allmap label {
+            max-width:none;
+        }
+    </style>
+
+    <!--百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&services=true&ak=4tPcrZcaduiSx5hSHGRvdAFO88gEKwKc"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/style1.css">
+    <link rel="stylesheet" type="text/css" href="css/buttonstyle.css">
+
+    <script type="text/javascript" src="js/jQuery.1.71.js" language="javascript"></script>
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/bootstrap1.min.js"></script>
+
+
+    <!--为实现拖拽 引入下列两库-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+    <title>商家用户主页</title>
+</head>
+<body>
+
+
+<div id="wrapper" >
+    <div class="overlap"></div>
+    <!-- sidebar-wrapper -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#" class="sidebar-header" style="color: #ffffff">我的订单</a>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>待派送<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="OnOrder">
+                </ul>
+            </li>
+
+            <li class="dropdown  dropdown-title">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>历史订单<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" id="HistoryOrder">
+                </ul>
+            </li>
+        </ul>
+
+        <div style="position:absolute;right:10px;bottom:10px;z-index: 1">
+            <button type="button" class="btn btn-circle btn-lg" data-toggle="modal" data-target="#sellermodal1" ><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" class="btn btn-circle btn-lg" data-toggle="modal" data-target="#myModalAnalysis"><i class="glyphicon glyphicon-object-align-bottom"></i></button>
+            <button type="button" class="btn btn-circle btn-lg" onclick="FrushAll()" ><i class="glyphicon glyphicon-refresh"></i></button>
+        </div>
+
+        <!-- 模态框1，编辑商品信息-->
+        <div class="modal fade overlap2" id="sellermodal1" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="myModelLabel1">增删商品</h2>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="modal-title">在售商品</h4>
+                        <table class="table" id="onsell">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">名称</th>
+                                <th style="text-align:center;">售价</th>
+                                <th style="text-align:center;">状态</th>
+                                <th style="text-align:center;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain1">
+
+                            </tbody>
+                        </table>
+                        <hr/>
+                        <hr style="color: #0b2e13"/>
+                        <h4 class="modal-title">下架商品</h4>
+                        <table class="table" id="offsell">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">名称</th>
+                                <th style="text-align:center;">售价</th>
+                                <th style="text-align:center;">状态</th>
+                                <th style="text-align:center;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbMain2">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="Flush()">刷新</button>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#sellermodal2">新增</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模态框3，提交表单添加新商品-->
+        <div class="modal fade overlap2" id="sellermodal2" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h1 class="modal-title" id="myModelLabel3">上架新商品</h1>
+                    </div>
+                    <form id="GoodForm" action="http://localhost:8082/supdem/product/add" method="POST" target="submitFrame">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-name1" class="control-label">商品名称</label>
+                                <input type="text" class="form-control" id="recipient-name1" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name2" class="control-label">价格</label>
+                                <input type="text" class="form-control" id="recipient-name2" name="price">
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="SubmitGoodform()">上架</button>
+                            <!--input type="submit" value="提交订单" class="btn btn-primary"-->
+                        </div>
+                    </form>
+                    <iframe  id="submitFrame" style="display: none;width:0; height:0" name="submitFrame"  src="about:blank"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <button type="button" class="hamburger is-open animated fadeInLeft" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+
+<div id="allmap"></div>
+
+<div class="input-group col-md-3" style="width:30%;top:3.5%;left:5%;position:fixed">
+</div>
+
+<!--<div class="input-group col-md-3" style="width:30%;top:3.5%;left:16%;position:fixed">
+    <button onclick="ReturnOri()" class="btn btn-primary">还原</button>
+    <button id="Button7" onclick="MultiPathButton()" class="btn btn-primary" >
+        开启多点规划模式
+    </button>
+    <button id="Button8" onclick="MultiPlan()" style="display:none" class="btn btn-primary" >
+        开始规划
+    </button>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        查看导航结果
+    </button>-->
+    <!--<button onclick="openHeatmap()" class="btn btn-primary" id="HeatmapBtn">查看热力图</button>-->
+    <!--<button onclick="ChangeWay();PlanToHere0()" class="btn btn-primary" id="Routeshift" style="display: none">切换</button>
+</div>-->
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  data-backdrop="false" aria-labelledby="modalTitle" onmouseout="removeModalBackdrop()">
+    <div class="modal-dialog" id="modalDialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    导航路线
+                </h4>
+            </div>
+
+            <div class="modal-body" style="overflow-y: scroll;height: 400px">
+                <div id="my-result"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" onclick="ChangeWay();PlanToHere0()">切换</button>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 分析模态框（Modal）新增代码 -->
+<div id="myModalAnalysis" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="modalTitle">
+                    图表分析
+                </h4>
+            </div>
+            <div class="modal-body" >
+                <div id="chartscanvas" style="height:400px;width:583px"></div>
+            </div>
+            <div class="modal-footer">
+                <!--                    修改代码开始-->
+                <button type="button" class="btn btn-primary" id="piecharts">
+                    饼图
+                </button>
+                <button type='button' class='btn btn-primary' id="barcharts">
+                    柱状图
+                </button>
+                <!--                    修改代码结束-->
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <label class="page-index" hidden>0</label>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<!--分析模态框拖拽-->
+<script>
+    //$('#myModalAnalysis').draggable();
+    function removeModalBackdrop() {
+        $(".modal-backdrop").remove();
+    }
+
+</script>
+
+<div id="container">
+    <div id="dock">
+        <ul>
+            <li>
+            <li>
+                <span>初始化</span> <button onclick="ReturnOri()" style="border: none;background: transparent;"><img src="photos/initial.png"></button>
+            </li>
+            <li>
+                <span>查看导航结果</span> <button data-toggle="modal" data-target="#myModal" style="border: none;background: transparent;"><img src="photos/result.png"></button>
+            </li>
+            <li>
+                <span id="buttonMulti">开启多点规划</span> <button id="startMulti" onclick="MultiPathButton()" style="border: none;background: transparent;"><img src="photos/route.png"></button>
+            </li>
+            <li>
+                <span>开始规划</span> <button id="ButtonStartPlan" onclick="MultiPlan()" style="display:none;border: none;background: transparent;"><img src="photos/search.png"></button>
+            </li>
+            <li>
+                <span>切换</span> <button onclick="ChangeWay();PlanToHere0()" id="Routeshift" style="display: none;border: none;background: transparent;"><img src="photos/change.png"></button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--页面样式-->
+<script type="text/javascript">
+
+    $("body").on('click','[datastopPropagation]',function (e) {
+        e.stopPropagation();
+    });
+
+    $(document).ready(function() {
+        var trigger = $('.hamburger'),
+            overlap=$('.overlap'),
+            isClosed = false;
+
+        trigger.click(function(event) {
+            hamburger_cross();
+        });
+
+        function hamburger_cross(){
+            if (isClosed == true) {
+                overlap.hide();
+                trigger.removeClass('is-closed');
+                trigger.addClass('is-open');
+                isClosed = false;
+
+            } else {
+                overlap.show();
+
+                trigger.removeClass('is-open');
+                trigger.addClass('is-closed');
+                isClosed = true;
+            }
+        }
+
+
+        $('[data-toggle="offcanvas"]').click(function () {
+            $('#wrapper').toggleClass('toggled');
+        });
+    });
+
+
+</script>
+
+<!--底图地图-->
+<script type="text/javascript">
+
+    var map = new BMap.Map("allmap");
+    var styleJson=[{
+        "featureType": "poilabel",
+        "elementType": "labels.icon",
+        "stylers": {
+            "visibility": "off"
+        }
+    }];
+
+    map.centerAndZoom(new BMap.Point(114.37292,30.543804), 16);  //初始中心点级别 中国。
+    map.enableScrollWheelZoom(); //启用滚轮放大缩小
+    map.enableKeyboard();//启用键盘上下左右键移动地图
+    map.addControl(new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_RIGHT,type:BMAP_NAVIGATION_CONTROL_LARGE,offset:new BMap.Size(0,60)}));
+    map.addControl(new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1}));
+    map.enableScrollWheelZoom();
+    map.addControl(new BMap.MapTypeControl());
+    map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT}));
+    map.setMapStyle({styleJson:styleJson});
+
+</script>
+
+<!--显示当前商家标记-->
+<script>
+
+    picfile4="photos/seller.png";//商家图标
+    var sellername = "Tudou";
+    var sellerId;
+    sellerId = 1;
+    //默认坐标
+    var sellerPoint=new BMap.Point(114.37292,30.543804);
+
+    var url=location.search;
+    var Request = new Object();
+    if(url.indexOf("?")!=-1) {
+        var str = url.substr(1);　//去掉?号
+        strs= str.split("&");
+        for(var i=0;i<strs.length;i++) {
+            Request[strs[i].split("=")[0]]=unescape(strs[ i].split("=")[1]);
+        }
+    }
+    //alert(Request["userid"]);
+    if(Request["sellerid"]){
+        sellername = Request["sellername"];
+        sellerId = Number(Request["sellerid"]);
+        //alert(sellerId)
+    }
+    alert("欢迎 "+sellername+" 登录");
+    //获取数据
+    $.ajax({
+        type:"get",
+        url:"http://localhost:8082/supdem/seller/all",
+        data:{},
+        dataType : "json",
+        async: false,
+        success:function (data) {
+            for(var i=0;i<data.length;i++){
+                if ( sellerId === data[i].sellerId){
+                    sellerPoint.lng=data[i].lng;
+                    sellerPoint.lat=data[i].lat;
+                }
+            }
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("请求数据失败!");
+        }
+    });
+
+    map.centerAndZoom(sellerPoint, 16);
+
+    addSellerMarker();
+
+    //创建商家marker
+    function addSellerMarker(){
+
+        var iconImg;
+        iconImg = new BMap.Icon(picfile4, new BMap.Size(50,50));
+
+        var marker = new BMap.Marker(sellerPoint,{icon:iconImg});
+        marker.disableMassClear();
+
+        map.addOverlay(marker);
+    }
+
+</script>
+
+<!--获取当前位置，用以导航，当前默认为商家位置-->
+<script>
+    var currentpoint = sellerPoint;
+</script>
+
+<!--商家在售商品列表-->
+<script type="text/javascript">
+
+    var goodlist = [];
+
+    Initial1();
+
+    //初始化函数
+    function Initial1() {
+        SQLgetData1(sellerId);
+        creatTB1();
+    }
+
+    //刷新列表
+    function Flush(){
+        clearTB1();
+        creatTB1();
+    }
+
+    //清空表格
+    function clearTB1(){
+        $("#onsell  tr:not(:first)").empty("");
+        $("#offsell  tr:not(:first)").empty("");
+    }
+
+    //创建在售表格
+    function creatTB1(){
+        var tbody1 = document.getElementById('onsell');
+        var tbody2 = document.getElementById('offsell');
+
+        // console.log(goodlist);
+
+        for(var i = 0;i < goodlist.length; i++){ //遍历一下json数据
+            // console.log(goodlist[i].status);
+            if(goodlist[i].status==='1'){
+                var trow1 = getDataRow1(goodlist[i]); //定义一个方法,返回tr数据
+                trow1.style.backgroundColor="#D9FFFF";
+                tbody1.appendChild(trow1);
+            }
+            if(goodlist[i].status==='0'){
+                var trow2 = getDataRow1(goodlist[i]); //定义一个方法,返回tr数据
+                trow2.style.backgroundColor="#FFB5B5";
+                tbody2.appendChild(trow2);
+            }
+        }
+    }
+
+    //修改数据库中的商品状态信息
+    function SQLchangeStatus(goodsId,status){
+        // console.log(goodsId);
+        // console.log(status);
+        $.ajax({
+            url:"http://localhost:8082/supdem/goods/update/"+goodsId,
+            data : {
+                _method : "PUT",
+                goodsId:goodsId,
+                goods_name:'',
+                goods_price:'',
+                status:status,
+            },
+            type : "POST",
+            async: false,
+            success:function (data) {
+                //mJson更新
+                for(var i=0;i<goodlist.length;i++){
+                    if(goodlist[i].goodsId === goodsId){
+                        // console.log(goodlist[i].name)
+                        goodlist[i].status=status;
+                    }
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("更新失败!");
+            }
+        });
+    }
+
+    //生成表格，带操作函数，h为一个goodlist数据
+    function getDataRow1(h){
+        //前四列信息
+        var row = document.createElement('tr'); //创建行
+        var nameCell = document.createElement('td'); //创建第一列name
+        nameCell.innerHTML = h.name; //填充数据
+        // console.log(h.name);
+        row.appendChild(nameCell); //加入行 ，下面类似
+        var priceCell = document.createElement('td');//创建第二列price
+        priceCell.innerHTML = h.price;
+        row.appendChild(priceCell);
+        var statusCell = document.createElement('td');//创建第三列status
+        statusCell.setAttribute("id","AC"+h.goodsId.toString());//每个available的id
+
+        if(h.status === '1'){row.setAttribute("id","A"+h.goodsId.toString());row.setAttribute("class","success");statusCell.innerHTML = "销售中";}
+        if(h.status === '0'){row.setAttribute("id","A"+h.goodsId.toString());row.setAttribute("class","danger");statusCell.innerHTML = "下架中";}
+        row.appendChild(statusCell);
+
+        //下架+删除
+        if (h.status==='1'){
+            var dataCell = document.createElement('td');//创建第四列，操作列
+            row.appendChild(dataCell);
+            //下架按钮
+            var offsellbtn = document.createElement('input');//创建一个input控件
+            offsellbtn.setAttribute('type','button'); //type="button"
+            offsellbtn.setAttribute('value','下架');
+            offsellbtn.setAttribute('class','btn btn-default btn-xs');
+            //下架后即修改按钮id
+            offsellbtn.setAttribute('id',"CartBtn"+h.goodsId.toString());//会修改按钮，设置id，删除按钮一直可以按，不用修改
+            //下架操作
+            offsellbtn.onclick=function(){
+                //找到按钮所在行的节点，然后删掉这一行，样式删除
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+
+                // SQLdBuy(h.My_id);//购物车删除，添加到购物清单
+                // 修改数据库中商品状态
+                SQLchangeStatus(h.goodsId,'0');
+                //刷新列表
+                Flush();
+                // goodlist.splice(h.List_id, 1);
+            };
+            dataCell.appendChild(offsellbtn); //把购买按钮加入td，别忘了
+
+            //删除按钮
+
+            var delbtn = document.createElement('input'); //创建一个input控件
+            delbtn.setAttribute('type','button'); //type="button"
+            delbtn.setAttribute('value','删除');
+            delbtn.setAttribute('class','btn btn-primary btn-xs');
+            //删除操作
+            delbtn.onclick=function(){
+                //找到按钮所在行的节点，然后删掉这一行
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                SQLdeleteData1(h.goodsId);
+                goodlist.splice(h.List_id, 1);
+            }
+            dataCell.appendChild(delbtn); //把删除按钮加入td，别忘了
+
+
+        }
+        //上架+删除
+        if(h.status==='0'){
+            var dataCell2 = document.createElement('td');//创建第四列，操作列
+            row.appendChild(dataCell2);
+            //上架按钮
+            var onsellbtn = document.createElement('input'); //创建一个input控件
+            onsellbtn.setAttribute('type','button'); //type="button"
+            onsellbtn.setAttribute('value','上架');
+            onsellbtn.setAttribute('class','btn btn-default btn-xs');
+            //上架后即修改按钮id，并更新当期数据为上架状态，删除数据，，
+            onsellbtn.setAttribute('id',"CartBtn"+h.goodsId.toString());//会修改按钮，设置id，删除按钮一直可以按，不用修改
+            //上架操作
+            onsellbtn.onclick=function(){
+                //找到按钮所在行的节点，然后删掉这一行，样式删除
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+
+                // SQLdBuy(h.My_id);//购物车删除，添加到购物清单
+                // 修改数据库中商品状态
+                SQLchangeStatus(h.goodsId,'1');
+                //刷新列表
+                Flush();
+            }
+            dataCell2.appendChild(onsellbtn); //把购买按钮加入td，别忘了
+
+            //删除按钮
+
+            var delbtn = document.createElement('input'); //创建一个input控件
+            delbtn.setAttribute('type','button'); //type="button"
+            delbtn.setAttribute('value','删除');
+            delbtn.setAttribute('class','btn btn-primary btn-xs');
+            //删除操作
+            delbtn.onclick=function(){
+                //找到按钮所在行的节点，然后删掉这一行
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                SQLdeleteData1(h.goodsId);
+                goodlist.splice(h.List_id, 1);
+            }
+            dataCell2.appendChild(delbtn); //把删除按钮加入td，别忘了
+        }
+        return row; //返回tr数据
+    }
+
+    //获取当前商家所有商品列表数据,goods数据
+    function SQLgetData1(id) {
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/goods/all",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                console.log(data);
+                var Temp;
+                for(var i=0;i<data.length;i++){
+                    //筛选当前商家数据，之后希望能从后台实现根据商家id查询商品列表
+                    if(id===data[i].sellerId){
+                        // console.log(data[i].name);
+                        goodlist.push({
+                            List_id:goodlist.length,
+                            goodsId:data[i].goodsId,
+                            name:data[i].name,
+                            price:data[i].price,
+                            status:data[i].status,
+                        });
+                    }
+                }
+                console.log(goodlist);
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求商家数据失败!");
+            }
+        });
+    }
+
+    //删除数据库goods中的物品，id为goodsId
+    function SQLdeleteData1(id) {
+        $.ajax({
+            url:"http://localhost:8082/supdem/goods/delete/"+id,
+            data : {_method : "DELETE",goodsId:id},
+            type : "POST",
+            async: false,
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("删除失败!");
+            }
+        });
+    }
+
+</script>
+
+<!--路径规划-->
+<script>
+
+    var ProductPosition=[];
+    /*function GetProductPosition(){
+        radius=0.5;
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/product/Buffer?"+"buffer="+radius+"&pointlat="+currentpoint.lat+"&pointlng="+currentpoint.lng,
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                ProductPosition=[];
+                ProductPosition.push(currentpoint);
+                for(let i=0;i<data.length;i++){
+                    ProductPosition.push(new BMap.Point(data[i].lng,data[i].lat))
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+            }
+        });
+    }*/
+    var distanceMatrix=new Array();
+    //GetProductPosition();
+    ProductPosition.push(currentpoint);
+    function GetPosition(lng,lat){
+        ProductPosition.push(new BMap.Point(lng,lat));
+        alert("加点成功");
+    }
+    //GetPosition(114.36392,30.543804);
+    //GetPosition(114.364044,30.537231);
+    function InitMatrix(){
+        for(var i=0;i<ProductPosition.length;i++)
+        {
+            distanceMatrix[i]=new Array(i);
+            for(var j=0;j<ProductPosition.length;j++)
+            {
+                distanceMatrix[i][j]=0;
+            }
+        }
+        distanceMatrix[ProductPosition.length-1][ProductPosition.length-1] = 0;
+    }
+
+
+    function GetDistance(Point1,Point2,i,j)
+    {
+        var walking=new BMap.WalkingRoute(map);
+        walking.search(Point1,Point2);
+        walking.setSearchCompleteCallback(function(){
+                var pts=walking.getResults().getPlan(0).getRoute(0).getPath();
+                var Points=[];
+                for(var k=0;k<pts.length;k++)
+                {
+                    Points.push(new BMap.Point(pts[k].lng,pts[k].lat));
+                }
+                var polyline=new BMap.Polyline(Points);
+                distanceMatrix[i][j]=BMapLib.GeoUtils.getPolylineDistance(polyline);
+            }
+        );
+        var walking1=new BMap.WalkingRoute(map);
+        walking1.search(Point2,Point1);
+        walking1.setSearchCompleteCallback(function(){
+                var pts=walking1.getResults().getPlan(0).getRoute(0).getPath();
+                var Points=[];
+                for(var k=0;k<pts.length;k++)
+                {
+                    Points.push(new BMap.Point(pts[k].lng,pts[k].lat));
+                }
+                var polyline=new BMap.Polyline(Points);
+                distanceMatrix[j][i]=BMapLib.GeoUtils.getPolylineDistance(polyline);
+            }
+        )
+    }
+
+    function GetDisMatrix(){
+        for(var i=0;i<ProductPosition.length-1;i++)
+        {
+            distanceMatrix[i][i]=0;
+            for(var j=i+1;j<ProductPosition.length;j++)
+            {
+                GetDistance(ProductPosition[i],ProductPosition[j],i,j);
+            }
+        }
+    }
+
+    var pathResult=[];
+
+    function GetPathResult(){
+        //ar distanceMatrix1=distanceMatrix;
+        $.ajax({
+            url:"http://localhost:8082/supdem/multi/getMultiPath",
+            data:JSON.stringify(distanceMatrix),
+            type:"post",
+            dataType:"json",
+            contentType:"application/json",
+            success:function(result){
+                pathResult=result;
+            },
+            error:function(msg){
+                alert("请求数据失败!");
+            }
+        })
+    }
+
+    function MultiPlan(){
+        if(ProductPosition.length<3){
+            alert("点位数不足");
+            return;
+        }
+        InitMatrix();
+        GetDisMatrix();
+        GetPathResult();
+        walking=new BMap.WalkingRoute(map);
+        var lab=new BMap.Label("起始点",{position:ProductPosition[0]});
+        map.addOverlay(lab);
+        //var marker1=new BMap.Marker(ProductPosition[0]);
+        //map.addOverlay(marker1);
+        for(var i=1;i<pathResult.length-1;i++)
+        {
+            var string=i;
+            var lab=new BMap.Label("途经点"+string,{position:ProductPosition[pathResult[i]]});
+            //var marker=new BMap.Marker(ProductPosition[pathResult[i]]);
+            map.addOverlay(lab);
+            //map.addOverlay(marker);
+            /*walking.setSearchCompleteCallback(function(){
+            var pts=walking.getResults().getPlan(0).getRoute(0).getPath();
+            var Points=[];
+            for(var i=0;i<pts.length;i++)
+            {
+            Points.push(new BMap.Point(pts[i].lng,pts[i].lat));
+            }
+            var polyline=new BMap.Polyline(Points);
+            map.addOverlay(polyline);
+ }
+ )*/
+        }
+        for(var i=0;i<pathResult.length-1;i++)
+        {
+            walking.search(ProductPosition[pathResult[i]],ProductPosition[pathResult[i+1]]);
+        }
+        walking.setSearchCompleteCallback(function(){
+            var pts = walking.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+            var polyline = new BMap.Polyline(pts);
+            map.addOverlay(polyline);
+            /*var m1 = new BMap.Marker(myP1);         //创建3个marker
+            var m2 = new BMap.Marker(myP2);
+            var m3 = new BMap.Marker(myP3);
+            map.addOverlay(m1);
+            map.addOverlay(m2);
+            map.addOverlay(m3);
+            var lab1 = new BMap.Label("起点",{position:myP1});        //创建3个label
+            var lab2 = new BMap.Label("途径点",{position:myP2});
+            var lab3 = new BMap.Label("终点",{position:myP3});
+            map.addOverlay(lab1);
+            map.addOverlay(lab2);
+            map.addOverlay(lab3); */
+        })
+    }
+
+    var buttonValue = 0;
+    function MultiPathButton(){
+        var buttonMuilti = document.getElementById("buttonMulti");
+        var buttonMuilti1 = document.getElementById("ButtonStartPlan");
+        if(buttonValue==0){
+            buttonValue=1;
+            buttonMuilti.innerText = "关闭多点规划";
+            buttonMuilti1.style.display="inline-block";
+        }
+        else{
+            buttonValue = 0;
+            buttonMuilti.innerText = "开启多点规划";
+            buttonMuilti1.style.display="none";
+        }
+
+
+    }
+
+</script>
+
+<!--新增商品-->
+<script type="text/javascript">
+    function SubmitGoodform() {
+        //var form = document.getElementById('myForm');
+        var form = new FormData(document.getElementById("GoodForm"));
+        //form.submit();
+        var TemMy_id=goodlist.length;
+        var data = {
+            'seller_id':sellerId,
+            'goods_name':form.get('name'),
+            'goods_price':form.get('price'),
+        };
+
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "http://localhost:8082/supdem/goods/add" ,//url
+            data: data,
+            async: false,
+            success: function (data) {
+                goodlist.push({
+                    List_id:goodlist.length,
+                    goodsId:data.goodsId,
+                    name:data.name,
+                    price:data.price,
+                    status:'1',
+                });
+                Flush();
+            },
+            error : function() {
+                alert("提交商家订单失败！");
+            }
+        });
+    }
+</script>
+
+<!--导航和找附近关键地点功能-->
+<script>
+    var changeID=0;
+
+    function ChangeWay() {
+        changeID++;
+        changeID=changeID%3;
+    }
+
+    function PlanToHere(endlng,endlat) {
+        endPoint = new BMap.Point(endlng,endlat);
+        PlanToHere0();
+    }
+
+    function PlanToHere0() {
+        var p1 = currentpoint;
+        var p2 = endPoint;
+        map.clearOverlays();
+        if(changeID==0){
+            var walking = new BMap.WalkingRoute(map, {renderOptions:{map: map, panel:"my-result",autoViewport: true}});
+            walking.search(p1, p2);
+        }
+        else if(changeID==1){
+            var transit = new BMap.TransitRoute(map, {renderOptions: {map: map,panel:"my-result", autoViewport: true}});
+            transit.search(p1, p2);
+        }
+        else{
+            var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "my-result", autoViewport: true}});
+            driving.search(p1, p2);
+        }
+        var change_cancel = document.getElementById("Routeshift");
+        change_cancel.style.display = "inline-block";
+        //$('#myModal').modal('toggle');
+    }
+
+    $(document).ready(function(){
+
+        $("#modalDialog").draggable();//为模态对话框添加拖拽
+        $("#myModal").css("overflow", "hidden");//禁止模态对话框的半透明背景滚动
+
+    })
+</script>
+
+<!--热力图-->
+<!--
+<script>
+    //判断浏览区是否支持canvas
+    function isSupportCanvas(){
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
+
+    function setGradient(){
+        /*格式如下所示:
+        {
+            0:'rgb(102, 255, 0)',
+            .5:'rgb(255, 170, 0)',
+            1:'rgb(255, 0, 0)'
+        }*/
+        var gradient = {
+            0:'rgb(102, 255, 0)',
+            .5:'rgb(255, 170, 0)',
+            1:'rgb(255, 0, 0)'};
+        var colors = document.querySelectorAll("input[type='color']");
+        colors = [].slice.call(colors,0);
+        colors.forEach(function(ele){
+            gradient[ele.getAttribute("data-key")] = ele.value;
+        });
+        heatmapOverlay.setOptions({"gradient":gradient});
+    }
+
+    function openHeatmap(){
+        if(!isSupportCanvas()){
+            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+        }
+        heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":35});
+        map.addOverlay(heatmapOverlay);
+        var points=[];
+        var myJson=mJson;
+        if (IsBuffer==1){
+            myJson = bJson;
+        }
+        for(var i=0;i<myJson.length;i++){
+            var mylat = myJson[i].lat;
+            var mylng = myJson[i].lng;
+            var mycount=0;
+            if(myJson[i].available=="1"){
+                mycount=1;
+            }
+            points.push({lng:mylng,lat:mylat,count:1+mycount});
+        }
+        heatmapOverlay.setDataSet({data:points,max:3});
+        setGradient();
+        heatmapOverlay.show();
+    }
+
+    function closeHeatmap(){
+        heatmapOverlay.hide();
+    }
+</script>
+-->
+
+<!--还原-->
+<script>
+    function ReturnOri() {
+        map.clearOverlays();
+        map.centerAndZoom(currentpoint,16);
+        var change_cancel = document.getElementById("Routeshift");
+        change_cancel.style.display = "none";
+        endpoint = new BMap.Point(114.36535,30.534151);
+        changeID=0;
+        bJson=[];
+        IsBuffer=0;
+        ProductPosition=[]
+        //getPerData();
+        addMarkerAll(-1);
+    }
+</script>
+
+<!--商家订单-->
+<script type="text/javascript">
+
+    var picfile1;
+    picfile1="photos/pick.png";//选中的点
+
+    var Order=[];
+    var HistoryOrder=[];
+    var HistoryOrder_all=[]; //新增代码
+
+    //获取订单数据
+    function getOrderdata(){
+        Order=[];
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/order/all",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                console.log(data);
+                for(var i=0;i<data.length;i++){
+                    if(data[i].sellerId===sellerId){
+                        Order.push({
+                            List_id:Order.length,   //订单在order中的位置
+                            orderId: data[i].orderId,
+                            sellerId:data[i].sellerId,
+                            remarkers:data[i].remarkers,
+                            product:data[i].product,
+                            buyerId:data[i].buyerId,
+                            address:data[i].address,
+                            lng:data[i].lng,
+                            lat:data[i].lat,
+                            type:'OnOrder',     //待派送  //历史订单HistoryOrder
+                        });
+                        addOrderMarker(Order.length-1);
+                        // 新增列表行
+                        createOption(Order[Order.length-1],Order[Order.length-1].type);
+                    }
+                }
+
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求订单数据失败!");
+            }
+        });
+    }
+    getOrderdata();
+
+    //获取历史订单数据
+    function getHistoryOrderdata(){
+        HistoryOrder=[];
+        $.ajax({
+            type:"get",
+            url:"http://localhost:8082/supdem/orderseller/all",
+            data:{},
+            dataType : "json",
+            async: false,
+            success:function (data) {
+                console.log(data);
+                for(var i=0;i<data.length;i++){
+                    if(data[i].sellerId===sellerId){
+                        if(HistoryOrder.length < 15){
+                            HistoryOrder.push({
+                                List_id:HistoryOrder.length,   //订单在historyorder中的位置
+                                orderId: data[i].orderId,
+                                sellerId:data[i].sellerId,
+                                remarkers:data[i].remarkers,
+                                product:data[i].product,
+                                buyerId:data[i].buyerId,
+                                address:data[i].address,
+                                lng:data[i].lng,
+                                lat:data[i].lat,
+                                type:'HistoryOrder',     //待派送  //历史订单HistoryOrder
+                            });
+                        }
+
+                        if(HistoryOrder.length>=15){
+                            HistoryOrder.splice(0,1);
+                            HistoryOrder.push({
+                                List_id:HistoryOrder[HistoryOrder.length-1].List_id+1,   //订单在historyorder中的位置
+                                orderId: data[i].orderId,
+                                sellerId:data[i].sellerId,
+                                remarkers:data[i].remarkers,
+                                product:data[i].product,
+                                buyerId:data[i].buyerId,
+                                address:data[i].address,
+                                lng:data[i].lng,
+                                lat:data[i].lat,
+                                type:'HistoryOrder',     //待派送  //历史订单HistoryOrder
+                            });
+
+                        }
+                        HistoryOrder_all.push({
+                            product:data[i].product,
+                        });
+                        // // addOrderMarker(HistoryOrder.length-1);
+                        // // 新增列表行
+                        // createOption(HistoryOrder[HistoryOrder.length-1],HistoryOrder[HistoryOrder.length-1].type);
+                    }
+                }
+                //最多只显示15条历史订单
+                for(var i = HistoryOrder.length-1; i>-1; i--){
+                    HistoryOrder[i].List_id=i;       //修改位置
+                    createOption(HistoryOrder[i], HistoryOrder[i].type);
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("请求订单数据失败!");
+            }
+        });
+    }
+    getHistoryOrderdata();
+
+    //创建当前订单marker
+    function addOrderMarker(i){
+        var json = Order[i];
+        var point = new BMap.Point(json.lng,json.lat);
+        var iconImg;
+        iconImg = new BMap.Icon(picfile1, new BMap.Size(50,50));
+
+        var marker = new BMap.Marker(point,{icon:iconImg});
+        //加入label方便后面单个删除
+        var label = new BMap.Label("订单orderid="+json.orderId,{offset:new BMap.Size(0,0)});
+
+        marker.disableMassClear();
+        // var iw = createOrderInfoWindow(i);
+        map.addOverlay(marker,label);
+        // map.openInfoWindow(iw,point);
+
+        (function(){
+            var index = i;
+            var _marker = marker;
+            _marker.addEventListener("click",function(){
+                var _iw = createOrderInfoWindow(index);
+                this.openInfoWindow(_iw);
+                //TempIndex=index;
+            });
+        })
+        ()
+    }
+
+    //创建当前订单InfoWindow
+    function createOrderInfoWindow(i){
+        var json = Order[i];
+        var iw;
+        var listid=json.List_id+1;
+        if(buttonValue==0){
+            iw = new BMap.InfoWindow(
+                "<b><strong>单号：</strong>"+listid+"</b><br>"+
+                "<span><strong>订单：</strong>"+json.product+"</span><br>"+
+                "<span><strong>备注：</strong>"+json.remarkers+"</span><br>"+
+                "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                "<div align='right'>"+
+                //在button中储存Seller的id号
+                "<button type=\"button\" class=\"btn btn-default\" onclick=\"Delivered("+json.orderId+")\"><span class=\"glyphicon glyphicon-check\"></span>已送达</button>"+
+                "<button type=\"button\" class=\"btn btn-default\" id=\"single\" onclick=\"PlanToHere("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon-bed\"></span>导航</button>"+
+                "<button type=\"button\" class=\"btn btn-default\" id=\"multi\" style = \"display: none\" onclick=\"GetPosition("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon-bed\"></span>加点</button>"+
+                "</div>"
+            );
+            return iw;
+        }
+        else{
+            iw = new BMap.InfoWindow(
+                "<b><strong>单号：</strong>"+listid+"</b><br>"+
+                "<span><strong>订单：</strong>"+json.product+"</span><br>"+
+                "<span><strong>备注：</strong>"+json.remarkers+"</span><br>"+
+                "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+                "<div align='right'>"+
+                //在button中储存Seller的id号
+                "<button type=\"button\" class=\"btn btn-default\" onclick=\"Delivered("+json.orderId+")\"><span class=\"glyphicon glyphicon-check\"></span>已送达</button>"+
+                "<button type=\"button\" class=\"btn btn-default\" id=\"single\" style = \"display: none\" onclick=\"PlanToHere("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon-bed\"></span>导航</button>"+
+                "<button type=\"button\" class=\"btn btn-default\" id=\"multi\" onclick=\"GetPosition("+json.lng+","+json.lat+")\"><span class=\"glyphicon glyphicon-bed\"></span>加点</button>"+
+                "</div>"
+            );
+            return iw;
+        }
+
+    }
+
+    //向HistoryOrderSeller增加数据
+    function addHOrder(data){
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "http://localhost:8082/supdem/orderseller/add" ,//url
+            data: data,
+            async: false,
+            success: function (data) {
+                if(HistoryOrder.length < 15){
+                    HistoryOrder.push({
+                        List_id:HistoryOrder.length,
+                        orderId:data.orderId,
+                        sellerId:data.sellerId,
+                        buyerId:data.buyerId,
+                        product:data.product,
+                        address:data.address,
+                        remarkers:data.remarkers,
+                        lng:data.lng,
+                        lat:data.lat,
+                        type:'HistoryOrder',
+                    });
+                }
+                //控制历史订单数量小于15
+                if(HistoryOrder.length>=15){
+                    HistoryOrder.push({
+                        List_id:HistoryOrder[HistoryOrder.length-1].List_id+1,
+                        orderId:data.orderId,
+                        sellerId:data.sellerId,
+                        buyerId:data.buyerId,
+                        product:data.product,
+                        address:data.address,
+                        remarkers:data.remarkers,
+                        lng:data.lng,
+                        lat:data.lat,
+                        type:'HistoryOrder',
+                    });
+                    HistoryOrder.splice(0,1);
+                    for(var i = HistoryOrder.length-1; i>-1; i--){
+                        HistoryOrder[i].List_id=i;       //修改位置
+                        createOption(HistoryOrder[i], HistoryOrder[i].type);
+                    }
+                }
+            },
+            error : function() {
+                console.log(data);
+                alert("历史订单更新失败！");
+            }
+        });
+    }
+
+    //删除中MerchantOrder的数据，id为订单id orderId
+    function SQLdeleteData1(id) {
+        $.ajax({
+            url:"http://localhost:8082/supdem/order/delete/"+id,
+            data : {_method : "DELETE", orderId:id},
+            type : "POST",
+            async: false,
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("删除失败!");
+            }
+        });
+    }
+
+    //已送达按钮响应函数，在MerchantOrder数据表中删除，增加到HistoryOrderSeller中
+    function Delivered(orderid){
+        // console.log(orderid);
+        var data={};
+        for(var i=0;i<Order.length;i++){
+            if(Order[i].orderId===orderid){
+                //var json=Order[i];
+                data = {
+                    'sellerId':Order[i].sellerId,
+                    'product':Order[i].product,
+                    'remarkers':Order[i].remarkers,
+                    'buyerId':Order[i].buyerId,
+                    'address':Order[i].address,
+                    'lng':Order[i].lng,
+                    'lat':Order[i].lat,
+                };
+                Order.splice(Order[i].List_id, 1);
+            }
+        }
+        SQLdeleteData1(orderid);
+        addHOrder(data);
+        //刷新
+        FrushAll();
+    }
+
+    //刷新页面内容
+    function FrushAll() {
+        FrushOrderMap();
+        FrushWrapper();
+    }
+
+    //重新加载地图订单
+    function FrushOrderMap(){
+        //清空当前地图订单marker
+        // map.clearOverlays();
+        //没能写出删除订单marker的方法，这里重新加载页面
+        location.reload(true);
+        //加载
+        // for(var i = 0; i < Order.length; i++){
+        //     addOrderMarker(i);
+        // }
+    }
+
+    //重新加载订单列表
+    function FrushWrapper() {
+        //清空列表
+        document.getElementById("OnOrder").innerHTML = "";
+        document.getElementById("HistoryOrder").innerHTML = "";
+        //加载当前订单
+        for(var i = 0; i < Order.length; i++){
+            createOption(Order[i], Order[i].type);
+        }
+        //加载历史订单(倒序)  最多只显示15条历史订单
+        for(var i = HistoryOrder.length-1; i>-1; i--){
+            createOption(HistoryOrder[i], HistoryOrder[i].type);
+            // center2MarkerHistory(i);
+        }
+        console.log(HistoryOrder);
+    }
+
+    //创建历史订单InfoWindow
+    function createHOrderInfoWindow(i){
+        var json = HistoryOrder[i];
+        var iw;
+        // var listid=json.List_id+1;
+        iw = new BMap.InfoWindow(
+            // "<b><strong>单号：</strong>"+listid+"</b><br>"+
+            "<span><strong>订单：</strong>"+json.product+"</span><br>"+
+            "<span><strong>备注：</strong>"+json.remarkers+"</span><br>"+
+            "<span><strong>地址：</strong>"+json.address+"</span><br>"+
+            "<span><strong>状态：</strong>已送达</span><br>"
+        );
+        return iw;
+    }
+
+    //创建列表
+    function createOption(data,type) {
+        var lil=document.createElement('li');
+        var orderid = data.List_id+1;
+        if(type==='OnOrder'){
+            lil.innerHTML='<a onclick="center2Marker('+(data.List_id)+')" datastopPropagation="true"'+'>'+'订单'+orderid+'：'+data.product+'</a>';
+        }
+        if(type==='HistoryOrder'){
+            lil.innerHTML='<a onclick="center2MarkerHistory('+(data.List_id)+')"datastopPropagation="true"'+'>'+'历史'+orderid+'：'+data.product+'</a>';
+        }
+        document.getElementById(type).appendChild(lil);
+    }
+
+    //地图缩放到所选订单并打开信息窗口
+    function center2Marker(orderId){
+        var Point=new BMap.Point(Order[orderId].lng,Order[orderId].lat);
+        map.centerAndZoom(Point, 16);
+        // map.openInfoWindow(iw,point);
+        var iw = createOrderInfoWindow(orderId);
+        map.openInfoWindow(iw,Point);
+    }
+
+    //地图缩放到所选历史订单并打开信息窗口
+    function center2MarkerHistory(HorderId){
+
+        console.log('HorderId:'+HorderId);
+        var Point=new BMap.Point(HistoryOrder[HorderId].lng,HistoryOrder[HorderId].lat);
+        map.centerAndZoom(Point, 16);
+        // map.openInfoWindow(iw,point);
+        var iw = createHOrderInfoWindow(HorderId);    //历史订单窗口
+        map.openInfoWindow(iw,Point);
+    }
+
+</script>
+
+<!--画统计图   新增代码-->
+<script>
+    var type=1; //默认绘制饼状图
+    drawecharts(type);
+
+    $("#piecharts").click(function () {
+        type=1;
+        drawecharts(type);
+    });
+
+    $("#barcharts").click(function () {
+        type=2;
+        drawecharts(type);
+    });
+
+    function drawecharts(type) {
+
+        var data1=[]; //商品名
+        var data2=[]; //饼图所用数据
+        var data3=[]; //柱状图所用数据
+
+        //记录所有商家已卖出商品
+        var allstring="";
+
+        //各商品易卖程度
+        //获取所有含【商品i】的数据条目，计算长度
+        for(var i=0;i<HistoryOrder_all.length;i++){
+            var temp=HistoryOrder_all[i].product;
+            console.log(temp);
+            if(i===HistoryOrder_all.length-1){
+                allstring = allstring+temp;
+            }
+            else{
+                allstring = allstring+temp+",";
+            }
+        }
+        console.log(allstring);
+        //将字符串存入数组
+        var allproduct = allstring.split(',');
+
+        //计算每种商品出现次数
+        function getWordCnt(){
+            return allproduct.reduce(function(prev,next){
+                prev[next] = (prev[next] + 1) || 1;
+                return prev;
+            },{});
+        };
+        var res =getWordCnt();
+        var keys = Object.keys(res);
+        data1=keys;
+
+        for(var i=0;i<keys.length;i++){
+            var eValue=eval('res.'+keys[i]);
+            data2.push({
+                value:eValue,
+                name:keys[i],
+            });
+            data3.push(eValue);
+        }
+
+        var dom = document.getElementById("chartscanvas");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        if(type===1){
+            option = {
+                title: {
+                    text: '商品销量百分比',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b} : {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: data1,
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['60%', '60%'],
+                        data: data2,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+        }
+        if(type===2){
+            option = {
+                xAxis: {
+                    type: 'category',
+                    axisLabel: {
+                        interval:0,
+                        rotate:0,
+                        textStyle: {
+                            fontSize : 15   //更改坐标轴文字大小
+                        }
+                    } ,
+                    data: data1,
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                title:
+                    {
+                        show:true,
+                        text:"商品销量统计",
+                        x:'center'
+                    },
+                tooltip:{
+                    trigger:'axis',
+                    axisPointer:{
+                        type:'shadow'
+                    }
+                },
+                series: [{
+                    data: data3,
+                    name:"总销量",
+                    barWidth:'60%',
+                    itemStyle:{
+                        normal:{
+                            color:'#fecc11'
+                        }
+                    },
+                    type: 'bar'
+                }]
+            };
+        }
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }}
+</script>
+
+
+</body>
+</html>
+
